@@ -1830,7 +1830,11 @@ static u32 GeneratePartyHash(const struct Trainer *trainer, u32 i)
 {
     const u8 *buffer = (const u8 *) &trainer->party[i];
     u32 n = sizeof(*trainer->party);
-    return Crc32B(buffer, n);
+    #if P_CUSTOM_COLOUR_VARIANTS
+      return Crc32B(buffer, n) ^ i;
+    #else
+      return Crc32B(buffer, n);
+    #endif
 }
 
 void ModifyPersonalityForNature(u32 *personality, u32 newNature)
