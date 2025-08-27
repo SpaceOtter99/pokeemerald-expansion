@@ -28,6 +28,9 @@
 #include "constants/battle_palace.h"
 #include "constants/battle_move_effects.h"
 #include "constants/event_objects.h" // only for SHADOW_SIZE constants
+#if P_CUSTOM_COLOUR_VARIANTS
+#include "variant_colours.h"
+#endif
 
 // this file's functions
 static u8 GetBattlePalaceMoveGroup(u8 battler, u16 move);
@@ -653,8 +656,17 @@ void BattleLoadMonSpriteGfx(struct Pokemon *mon, u32 battler)
     else
         paletteData = GetMonSpritePalFromSpeciesAndPersonality(species, isShiny, personalityValue);
 
+#if P_CUSTOM_COLOUR_VARIANTS
+    u16 tmp[16];
+    CpuCopy16(paletteData, tmp, sizeof tmp);
+    ApplyVariantToPaletteBuffer(species, isShiny, personalityValue, tmp);
+    LoadPalette(tmp, paletteOffset, PLTT_SIZE_4BPP);
+    LoadPalette(tmp, BG_PLTT_ID(8) + BG_PLTT_ID(battler), PLTT_SIZE_4BPP);
+#else
     LoadPalette(paletteData, paletteOffset, PLTT_SIZE_4BPP);
     LoadPalette(paletteData, BG_PLTT_ID(8) + BG_PLTT_ID(battler), PLTT_SIZE_4BPP);
+#endif
+
 
     // transform's pink color
     if (gBattleSpritesDataPtr->battlerData[battler].transformSpecies != SPECIES_NONE)
