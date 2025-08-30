@@ -1,0 +1,703 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-Wno-switch",
+      "-Werror",
+      "-std=c11",
+      "-O2",
+      "-o",
+      "aif2pcm",
+      "main.c"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/aif2pcm",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/aif2pcm/main.c",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/aif2pcm/aif2pcm"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-Wno-switch",
+      "-Werror",
+      "-std=c11",
+      "-O2",
+      "-o",
+      "aif2pcm",
+      "extended.c"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/aif2pcm",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/aif2pcm/extended.c",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/aif2pcm/aif2pcm"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-std=c11",
+      "-O2",
+      "-o",
+      "bin2c",
+      "bin2c.c"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/bin2c",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/bin2c/bin2c.c",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/bin2c/bin2c"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-o",
+      "gbafix",
+      "gbafix.c"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbafix",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbafix/gbafix.c",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbafix/gbafix"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wno-sign-compare",
+      "-std=c11",
+      "-O2",
+      "-DPNG_SKIP_SETJMP_CHECK",
+      "-I/usr/include/libpng16",
+      "-o",
+      "gbagfx",
+      "main.c"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx/main.c",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx/gbagfx"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wno-sign-compare",
+      "-std=c11",
+      "-O2",
+      "-DPNG_SKIP_SETJMP_CHECK",
+      "-I/usr/include/libpng16",
+      "-o",
+      "gbagfx",
+      "convert_png.c"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx/convert_png.c",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx/gbagfx"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wno-sign-compare",
+      "-std=c11",
+      "-O2",
+      "-DPNG_SKIP_SETJMP_CHECK",
+      "-I/usr/include/libpng16",
+      "-o",
+      "gbagfx",
+      "gfx.c"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx/gfx.c",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx/gbagfx"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wno-sign-compare",
+      "-std=c11",
+      "-O2",
+      "-DPNG_SKIP_SETJMP_CHECK",
+      "-I/usr/include/libpng16",
+      "-o",
+      "gbagfx",
+      "jasc_pal.c"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx/jasc_pal.c",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx/gbagfx"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wno-sign-compare",
+      "-std=c11",
+      "-O2",
+      "-DPNG_SKIP_SETJMP_CHECK",
+      "-I/usr/include/libpng16",
+      "-o",
+      "gbagfx",
+      "lz.c"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx/lz.c",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx/gbagfx"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wno-sign-compare",
+      "-std=c11",
+      "-O2",
+      "-DPNG_SKIP_SETJMP_CHECK",
+      "-I/usr/include/libpng16",
+      "-o",
+      "gbagfx",
+      "rl.c"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx/rl.c",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx/gbagfx"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wno-sign-compare",
+      "-std=c11",
+      "-O2",
+      "-DPNG_SKIP_SETJMP_CHECK",
+      "-I/usr/include/libpng16",
+      "-o",
+      "gbagfx",
+      "util.c"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx/util.c",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx/gbagfx"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wno-sign-compare",
+      "-std=c11",
+      "-O2",
+      "-DPNG_SKIP_SETJMP_CHECK",
+      "-I/usr/include/libpng16",
+      "-o",
+      "gbagfx",
+      "font.c"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx/font.c",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx/gbagfx"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wno-sign-compare",
+      "-std=c11",
+      "-O2",
+      "-DPNG_SKIP_SETJMP_CHECK",
+      "-I/usr/include/libpng16",
+      "-o",
+      "gbagfx",
+      "huff.c"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx/huff.c",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/gbagfx/gbagfx"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-Wall",
+      "-std=c++17",
+      "-O2",
+      "-I",
+      ".",
+      "-o",
+      "jsonproc",
+      "jsonproc.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/jsonproc",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/jsonproc/jsonproc.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/jsonproc/jsonproc"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-Wall",
+      "-std=c++11",
+      "-O2",
+      "-o",
+      "mapjson",
+      "json11.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mapjson",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mapjson/json11.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mapjson/mapjson"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-Wall",
+      "-std=c++11",
+      "-O2",
+      "-o",
+      "mapjson",
+      "mapjson.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mapjson",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mapjson/mapjson.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mapjson/mapjson"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++11",
+      "-O2",
+      "-Wall",
+      "-Wno-switch",
+      "-Werror",
+      "-o",
+      "mid2agb",
+      "agb.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mid2agb",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mid2agb/agb.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mid2agb/mid2agb"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++11",
+      "-O2",
+      "-Wall",
+      "-Wno-switch",
+      "-Werror",
+      "-o",
+      "mid2agb",
+      "error.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mid2agb",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mid2agb/error.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mid2agb/mid2agb"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++11",
+      "-O2",
+      "-Wall",
+      "-Wno-switch",
+      "-Werror",
+      "-o",
+      "mid2agb",
+      "main.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mid2agb",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mid2agb/main.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mid2agb/mid2agb"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++11",
+      "-O2",
+      "-Wall",
+      "-Wno-switch",
+      "-Werror",
+      "-o",
+      "mid2agb",
+      "midi.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mid2agb",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mid2agb/midi.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mid2agb/mid2agb"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++11",
+      "-O2",
+      "-Wall",
+      "-Wno-switch",
+      "-Werror",
+      "-o",
+      "mid2agb",
+      "tables.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mid2agb",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mid2agb/tables.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/mid2agb/mid2agb"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++11",
+      "-O2",
+      "-Wall",
+      "-Wno-switch",
+      "-Werror",
+      "-o",
+      "preproc",
+      "asm_file.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc/asm_file.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc/preproc"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++11",
+      "-O2",
+      "-Wall",
+      "-Wno-switch",
+      "-Werror",
+      "-o",
+      "preproc",
+      "c_file.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc/c_file.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc/preproc"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++11",
+      "-O2",
+      "-Wall",
+      "-Wno-switch",
+      "-Werror",
+      "-o",
+      "preproc",
+      "charmap.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc/charmap.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc/preproc"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++11",
+      "-O2",
+      "-Wall",
+      "-Wno-switch",
+      "-Werror",
+      "-o",
+      "preproc",
+      "preproc.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc/preproc.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc/preproc"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++11",
+      "-O2",
+      "-Wall",
+      "-Wno-switch",
+      "-Werror",
+      "-o",
+      "preproc",
+      "string_parser.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc/string_parser.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc/preproc"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++11",
+      "-O2",
+      "-Wall",
+      "-Wno-switch",
+      "-Werror",
+      "-o",
+      "preproc",
+      "utf8.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc/utf8.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc/preproc"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++11",
+      "-O2",
+      "-Wall",
+      "-Wno-switch",
+      "-Werror",
+      "-o",
+      "preproc",
+      "io.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc/io.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/preproc/preproc"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++11",
+      "-O2",
+      "-Wall",
+      "-Wno-switch",
+      "-Werror",
+      "-o",
+      "ramscrgen",
+      "main.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/ramscrgen",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/ramscrgen/main.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/ramscrgen/ramscrgen"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++11",
+      "-O2",
+      "-Wall",
+      "-Wno-switch",
+      "-Werror",
+      "-o",
+      "ramscrgen",
+      "sym_file.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/ramscrgen",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/ramscrgen/sym_file.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/ramscrgen/ramscrgen"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++11",
+      "-O2",
+      "-Wall",
+      "-Wno-switch",
+      "-Werror",
+      "-o",
+      "ramscrgen",
+      "elf.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/ramscrgen",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/ramscrgen/elf.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/ramscrgen/ramscrgen"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-std=c11",
+      "-O2",
+      "-DPNG_SKIP_SETJMP_CHECK",
+      "-I/usr/include/libpng16",
+      "-o",
+      "rsfont",
+      "main.c"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/rsfont",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/rsfont/main.c",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/rsfont/rsfont"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-std=c11",
+      "-O2",
+      "-DPNG_SKIP_SETJMP_CHECK",
+      "-I/usr/include/libpng16",
+      "-o",
+      "rsfont",
+      "convert_png.c"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/rsfont",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/rsfont/convert_png.c",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/rsfont/rsfont"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-std=c11",
+      "-O2",
+      "-DPNG_SKIP_SETJMP_CHECK",
+      "-I/usr/include/libpng16",
+      "-o",
+      "rsfont",
+      "util.c"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/rsfont",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/rsfont/util.c",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/rsfont/rsfont"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-std=c11",
+      "-O2",
+      "-DPNG_SKIP_SETJMP_CHECK",
+      "-I/usr/include/libpng16",
+      "-o",
+      "rsfont",
+      "font.c"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/rsfont",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/rsfont/font.c",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/rsfont/rsfont"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-Wall",
+      "-Werror",
+      "-std=c++11",
+      "-O2",
+      "-o",
+      "scaninc",
+      "scaninc.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/scaninc",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/scaninc/scaninc.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/scaninc/scaninc"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-Wall",
+      "-Werror",
+      "-std=c++11",
+      "-O2",
+      "-o",
+      "scaninc",
+      "c_file.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/scaninc",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/scaninc/c_file.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/scaninc/scaninc"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-Wall",
+      "-Werror",
+      "-std=c++11",
+      "-O2",
+      "-o",
+      "scaninc",
+      "asm_file.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/scaninc",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/scaninc/asm_file.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/scaninc/scaninc"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-Wall",
+      "-Werror",
+      "-std=c++11",
+      "-O2",
+      "-o",
+      "scaninc",
+      "source_file.cpp"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/scaninc",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/scaninc/source_file.cpp",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/scaninc/scaninc"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-O2",
+      "-o",
+      "trainerproc",
+      "main.c"
+    ],
+    "directory": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/trainerproc",
+    "file": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/trainerproc/main.c",
+    "output": "/home/heather/Documents/Coding/ROMHacks/pokeemerald/pokeemerald-expansion/tools/trainerproc/trainerproc"
+  }
+]
