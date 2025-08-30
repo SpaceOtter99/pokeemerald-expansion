@@ -31,6 +31,7 @@
 #if P_CUSTOM_COLOUR_VARIANTS
 #include "variant_colours.h"
 #endif
+#include "_debug_utils.h"
 
 // this file's functions
 static u8 GetBattlePalaceMoveGroup(u8 battler, u16 move);
@@ -613,6 +614,7 @@ void BattleLoadMonSpriteGfx(struct Pokemon *mon, u32 battler)
     u32 personalityValue, isShiny, species, paletteOffset, position;
     const u16 *paletteData;
     struct Pokemon *illusionMon = GetIllusionMonPtr(battler);
+    MgbaDumpPokemon(MGBA_LOG_INFO, mon);
     if (illusionMon != NULL)
         mon = illusionMon;
 
