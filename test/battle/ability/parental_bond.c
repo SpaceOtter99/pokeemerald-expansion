@@ -154,8 +154,7 @@ SINGLE_BATTLE_TEST("Parental Bond has no affect on multi hit moves and they stil
         ANIMATION(ANIM_TYPE_MOVE, MOVE_COMET_PUNCH, player);
         MESSAGE("The Pokémon was hit 2 time(s)!");
         ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
-    }
-    THEN {
+    } THEN {
         EXPECT_EQ(player->species, SPECIES_KANGASKHAN_MEGA);
     }
 }
@@ -184,8 +183,7 @@ SINGLE_BATTLE_TEST("Parental Bond has no affect on multi hit moves and they stil
         ANIMATION(ANIM_TYPE_MOVE, MOVE_COMET_PUNCH, player);
         MESSAGE("The Pokémon was hit 3 time(s)!");
         ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
-    }
-    THEN {
+    } THEN {
         EXPECT_EQ(player->species, SPECIES_KANGASKHAN_MEGA);
     }
 }
@@ -215,8 +213,7 @@ SINGLE_BATTLE_TEST("Parental Bond has no affect on multi hit moves and they stil
         ANIMATION(ANIM_TYPE_MOVE, MOVE_COMET_PUNCH, player);
         MESSAGE("The Pokémon was hit 4 time(s)!");
         ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
-    }
-    THEN {
+    } THEN {
         EXPECT_EQ(player->species, SPECIES_KANGASKHAN_MEGA);
     }
 }
@@ -245,8 +242,7 @@ SINGLE_BATTLE_TEST("Parental Bond has no affect on multi hit moves and they stil
         NOT ANIMATION(ANIM_TYPE_MOVE, MOVE_COMET_PUNCH, player);
         MESSAGE("The Pokémon was hit 5 time(s)!");
         ANIMATION(ANIM_TYPE_MOVE, MOVE_CELEBRATE, opponent);
-    }
-    THEN {
+    } THEN {
         EXPECT_EQ(player->species, SPECIES_KANGASKHAN_MEGA);
     }
 }
@@ -312,8 +308,7 @@ SINGLE_BATTLE_TEST("Parental Bond only triggers Dragon Tail's target switch out 
         HP_BAR(opponent);
         HP_BAR(opponent);
         MESSAGE("The opposing Wynaut was dragged out!");
-    }
-    THEN {
+    } THEN {
         EXPECT_EQ(player->species, SPECIES_KANGASKHAN_MEGA);
     }
 }

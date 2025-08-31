@@ -325,8 +325,7 @@ DOUBLE_BATTLE_TEST("Damage calculation: Combined pledge move")
     }
     SCENE {
         HP_BAR(playerRight, captureDamage: &dmg);
-    }
-    THEN {
+    } THEN {
         EXPECT_EQ(expectedDamage, dmg);
     }
 }

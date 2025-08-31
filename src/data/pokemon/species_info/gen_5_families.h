@@ -9570,8 +9570,8 @@ const struct SpeciesInfo gSpeciesInfoGen5[] =
         .height = 5,
         .weight = 90,
         .description = COMPOUND_STRING(
-            "It psychically squeezes the brain of\n"
-            "its foe, causing unendurable headaches.\n"
+            "It psychically squeezes the brains of\n"
+            "its foes, causing unendurable headaches.\n"
             "Rumors of its origin are linked to a UFO\n"
             "crash site in the desert 50 years ago."),
         .pokemonScale = 432,
@@ -9646,7 +9646,7 @@ const struct SpeciesInfo gSpeciesInfoGen5[] =
         .description = COMPOUND_STRING(
             "It can manipulate an opponent's memory.\n"
             "Apparently, it communicates by flashing\n"
-            "its three fingers, but those patterns\n"
+            "its three fingers, but the patterns\n"
             "haven't been decoded. "),
         .pokemonScale = 305,
         .pokemonOffset = 7,

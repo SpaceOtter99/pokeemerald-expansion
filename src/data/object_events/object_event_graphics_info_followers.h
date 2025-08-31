@@ -30,13 +30,13 @@ const struct ObjectEventGraphicsInfo gPokeballGraphics[POKEBALL_COUNT] = {
     POKEBALL_GFX_INFO(TIMER),
     POKEBALL_GFX_INFO(LUXURY),
     POKEBALL_GFX_INFO(PREMIER),
-    // Gen IV/Sinnoh pokeballs
+    // Gen IV/Sinnoh
     POKEBALL_GFX_INFO(DUSK),
     POKEBALL_GFX_INFO(HEAL),
     POKEBALL_GFX_INFO(QUICK),
     POKEBALL_GFX_INFO(CHERISH),
     POKEBALL_GFX_INFO(PARK),
-    // Gen II/Johto Apricorn pokeballs
+    // Gen II/Johto Apricorn Balls
     POKEBALL_GFX_INFO(FAST),
     POKEBALL_GFX_INFO(LEVEL),
     POKEBALL_GFX_INFO(LURE),

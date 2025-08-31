@@ -36,8 +36,7 @@ SINGLE_BATTLE_TEST("Stamina raises Defense by 1 when hit by a move")
     } SCENE {
         STAMINA_HIT(opponent, player, move, "Wobbuffet's Defense rose!", turnOneHit);
         STAMINA_HIT(opponent, player, move, "Wobbuffet's Defense rose!", turnTwoHit);
-    }
-    THEN {
+    } THEN {
         if (move == MOVE_SCRATCH) {
             EXPECT_MUL_EQ(turnTwoHit, Q_4_12(1.5), turnOneHit);
         }
@@ -80,8 +79,7 @@ DOUBLE_BATTLE_TEST("Stamina activates correctly for every battler with the abili
         }
 
         NOT HP_BAR(opponentLeft); // We need to check the attacker itself does NOT get damaged. There was an issue when the targets would get overwritten by the Stamina's stat raise.
-    }
-    THEN {
+    } THEN {
         EXPECT_NE(playerLeft->hp, playerLeft->maxHP);
         EXPECT_NE(playerRight->hp, playerRight->maxHP);
         EXPECT_NE(opponentRight->hp, opponentRight->maxHP);

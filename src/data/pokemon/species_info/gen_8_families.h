@@ -7230,7 +7230,7 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         .weight = 1050,
         .description = COMPOUND_STRING(
             "This form of Urshifu is a strong believer\n"
-            "in the one-hit KO. Its strategy is to leap\n"
+            "in one-hit KOs. Its strategy is to leap\n"
             "in close to foes and land a devastating\n"
             "blow with a hardened fist."),
         .pokemonScale = 256,

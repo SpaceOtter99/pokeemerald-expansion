@@ -7183,7 +7183,7 @@ const struct SpeciesInfo gSpeciesInfoGen7[] =
         .description = COMPOUND_STRING(
             "It stores hundreds of liters of poisonous\n"
             "liquid inside its body. It is one of the\n"
-            "organisms known as UBs."),
+            "organisms known as Ultra Beasts."),
         .pokemonScale = 256,
         .pokemonOffset = 0,
         .trainerScale = 405,

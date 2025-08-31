@@ -11,7 +11,7 @@ SINGLE_BATTLE_TEST("Simple Beam replaces target's ability with Simple")
     GIVEN {
         PLAYER(SPECIES_WOBBUFFET) { Ability(ABILITY_TELEPATHY); }
         OPPONENT(SPECIES_CHARMANDER) { Ability(ABILITY_BLAZE); }
-    }WHEN {
+    } WHEN {
         TURN { MOVE(player, MOVE_SIMPLE_BEAM); }
     } SCENE {
         ANIMATION(ANIM_TYPE_MOVE, MOVE_SIMPLE_BEAM, player);

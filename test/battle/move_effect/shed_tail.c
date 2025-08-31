@@ -23,7 +23,7 @@ SINGLE_BATTLE_TEST("Shed Tail creates a Substitute at the cost of 1/2 users maxi
         HP_BAR(player, captureDamage: &costHP);
         MESSAGE("Wobbuffet shed its tail to create a decoy!");
         SEND_IN_MESSAGE("Wynaut");
-    }THEN {
+    } THEN {
         EXPECT_EQ(maxHP / 2, costHP);
     }
 }

@@ -11,7 +11,7 @@ SINGLE_BATTLE_TEST("Skill Swap swaps user and target's abilities")
     GIVEN {
         PLAYER(SPECIES_WOBBUFFET) { Ability(ABILITY_TELEPATHY); }
         OPPONENT(SPECIES_CHARMANDER) { Ability(ABILITY_BLAZE); }
-    }WHEN {
+    } WHEN {
         TURN { MOVE(player, MOVE_SKILL_SWAP); }
     } SCENE {
         ANIMATION(ANIM_TYPE_MOVE, MOVE_SKILL_SWAP, player);

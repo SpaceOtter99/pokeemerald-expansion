@@ -11,7 +11,7 @@ SINGLE_BATTLE_TEST("Worry Seed replaces target's ability with Insomnia")
     GIVEN {
         PLAYER(SPECIES_WOBBUFFET) { Ability(ABILITY_TELEPATHY); }
         OPPONENT(SPECIES_CHARMANDER) { Ability(ABILITY_BLAZE); }
-    }WHEN {
+    } WHEN {
         TURN { MOVE(player, MOVE_WORRY_SEED); }
     } SCENE {
         ANIMATION(ANIM_TYPE_MOVE, MOVE_WORRY_SEED, player);

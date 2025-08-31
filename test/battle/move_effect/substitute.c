@@ -22,7 +22,7 @@ SINGLE_BATTLE_TEST("Substitute creates a Substitute at the cost of 1/4 users max
         ANIMATION(ANIM_TYPE_MOVE, MOVE_SUBSTITUTE, player);
         HP_BAR(player, captureDamage: &costHP);
         MESSAGE("Wobbuffet put in a substitute!");
-    }THEN {
+    } THEN {
         EXPECT_EQ(maxHP / 4, costHP);
     }
 }

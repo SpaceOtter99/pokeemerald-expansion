@@ -31,12 +31,10 @@ SINGLE_BATTLE_TEST("Damage calculation matches Gen5+")
         TURN {
             MOVE(player, MOVE_ICE_FANG, WITH_RNG(RNG_DAMAGE_MODIFIER, i));
         }
-    }
-    SCENE {
+    } SCENE {
         MESSAGE("Glaceon used Ice Fang!");
         HP_BAR(opponent, captureDamage: &dmg);
-    }
-    THEN {
+    } THEN {
         EXPECT_EQ(expectedDamage, dmg);
     }
 }
@@ -69,12 +67,10 @@ SINGLE_BATTLE_TEST("Damage calculation matches Gen5+ (Muscle Band, crit)")
         TURN {
             MOVE(player, MOVE_ICE_FANG, WITH_RNG(RNG_DAMAGE_MODIFIER, i), criticalHit: TRUE);
         }
-    }
-    SCENE {
+    } SCENE {
         MESSAGE("Glaceon used Ice Fang!");
         HP_BAR(opponent, captureDamage: &dmg);
-    }
-    THEN {
+    } THEN {
         EXPECT_EQ(expectedDamage, dmg);
     }
 }
@@ -107,12 +103,10 @@ SINGLE_BATTLE_TEST("Damage calculation matches Gen5+ (Marshadow vs Mawile)")
         TURN {
             MOVE(player, MOVE_SPECTRAL_THIEF, WITH_RNG(RNG_DAMAGE_MODIFIER, i), criticalHit: FALSE);
         }
-    }
-    SCENE{
+    } SCENE {
         MESSAGE("Marshadow used Spectral Thief!");
         HP_BAR(opponent, captureDamage: &dmg);
-    }
-    THEN{
+    } THEN {
         EXPECT_EQ(expectedDamage, dmg);
     }
 }
@@ -179,14 +173,12 @@ SINGLE_BATTLE_TEST("Punching Glove vs Muscle Band Damage calculation")
             MOVE(player, MOVE_DRAIN_PUNCH, WITH_RNG(RNG_DAMAGE_MODIFIER, i));
             MOVE(opponent, MOVE_DRAIN_PUNCH, WITH_RNG(RNG_DAMAGE_MODIFIER, i));
         }
-    }
-    SCENE {
+    } SCENE {
         ANIMATION(ANIM_TYPE_MOVE, MOVE_DRAIN_PUNCH, player);
         HP_BAR(opponent, captureDamage: &dmgPlayer);
         ANIMATION(ANIM_TYPE_MOVE, MOVE_DRAIN_PUNCH, opponent);
         HP_BAR(player, captureDamage: &dmgOpponent);
-    }
-    THEN {
+    } THEN {
         EXPECT_EQ(expectedDamagePlayer, dmgPlayer);
         EXPECT_EQ(expectedDamageOpponent, dmgOpponent);
     }
@@ -219,12 +211,10 @@ SINGLE_BATTLE_TEST("Gem boosted Damage calculation")
         TURN {
             MOVE(player, MOVE_DRAIN_PUNCH, WITH_RNG(RNG_DAMAGE_MODIFIER, i));
         }
-    }
-    SCENE {
+    } SCENE {
         ANIMATION(ANIM_TYPE_MOVE, MOVE_DRAIN_PUNCH, player);
         HP_BAR(opponent, captureDamage: &dmg);
-    }
-    THEN {
+    } THEN {
         EXPECT_EQ(expectedDamage, dmg);
     }
 }

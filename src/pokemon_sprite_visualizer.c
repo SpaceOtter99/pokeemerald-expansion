@@ -452,8 +452,8 @@ static void PrintInstructionsOnWindow(struct PokemonSpriteVisualizer *data)
 #endif
 
 
-    u8 textBottom[] = _("BACK:\nFRONT:\nBG:$");
-    u8 textBottomForms[] = _("BACK:\nFRONT:\nBG:\nFORMS:$");
+    u8 textBottom[] = _("Back:\nFront:\nBG:$");
+    u8 textBottomForms[] = _("Back:\nFront:\nBG:\nForms:$");
     u8 textBottomSubmenuTwo[] = _("B coords:\nF coords:\nF elev:");
     u8 textBottomSubmenuThree[] = _("X coords:\nY coords:\nSize:");
     u16 species = data->modifyArrows.currValue;

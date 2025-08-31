@@ -11,7 +11,7 @@ SINGLE_BATTLE_TEST("Speed Swap swaps user and target's speed stats")
     GIVEN {
         PLAYER(SPECIES_WOBBUFFET) { Speed(6); }
         OPPONENT(SPECIES_WOBBUFFET) { Speed(10); }
-    }WHEN {
+    } WHEN {
         TURN { MOVE(opponent, MOVE_SCRATCH); MOVE(player, MOVE_SPEED_SWAP); }
         TURN { MOVE(opponent, MOVE_SCRATCH); MOVE(player, MOVE_SCRATCH); }
     } SCENE {
@@ -37,7 +37,7 @@ SINGLE_BATTLE_TEST("Speed Swap doesn't swap user and target's speed modifiers")
         ASSUME(GetMoveEffect(MOVE_RAIN_DANCE) == EFFECT_RAIN_DANCE);
         PLAYER(SPECIES_WOBBUFFET) { Speed(8); }
         OPPONENT(species) { Speed(10); Ability(ability); }
-    }WHEN {
+    } WHEN {
         TURN { MOVE(opponent, move); MOVE(player, MOVE_SPEED_SWAP); }
         TURN { MOVE(opponent, MOVE_SCRATCH); MOVE(player, MOVE_SCRATCH); }
     } SCENE {
