@@ -1,6 +1,7 @@
 #include "global.h"
 #include "battle_pyramid.h"
 #include "bg.h"
+#include "event_data.h"
 #include "fieldmap.h"
 #include "fldeff.h"
 #include "fldeff_misc.h"
@@ -879,33 +880,81 @@ static void UNUSED ApplyGlobalTintToPaletteSlot(u8 slot, u8 count)
 
 }
 
-static void LoadTilesetPalette(struct Tileset const *tileset, u16 destOffset, u16 size, bool8 skipFaded)
+static void LoadTilesetPalette(const struct Tileset *tileset, u16 destOffset, u16 size, bool8 skipFaded)
 {
-    if (tileset)
+    u16 black = RGB_BLACK;
+    u8 season = getCurrentSeason();
+
+    if (!tileset)
+        return;
+
+    // Choose which palette bank to use based on season, with fallbacks.
+    // For uncompressed palettes, these are arrays of palette pointers.
+    const u16 (*seasonPals)[16] = tileset->palettes;
+    if (season == SEASON_SUMMER && tileset->palettes_summer != NULL)
+        seasonPals = tileset->palettes_summer;
+    else if (season == SEASON_AUTUMN && tileset->palettes_autumn != NULL)
+        seasonPals = tileset->palettes_autumn;
+    else if (season == SEASON_WINTER && tileset->palettes_winter != NULL)
+        seasonPals = tileset->palettes_winter;
+
+    // For compressed palettes, these are base pointers to LZ data.
+    const u32 *seasonPalsCompressed = (const u32 *)tileset->palettes;
+    if (season == SEASON_SUMMER && tileset->palettes_summer != NULL)
+        seasonPalsCompressed = (const u32 *)tileset->palettes_summer;
+    else if (season == SEASON_AUTUMN && tileset->palettes_autumn != NULL)
+        seasonPalsCompressed = (const u32 *)tileset->palettes_autumn;
+    else if (season == SEASON_WINTER && tileset->palettes_winter != NULL)
+        seasonPalsCompressed = (const u32 *)tileset->palettes_winter;
+
+    if (tileset->isSecondary == FALSE)
     {
-        if (tileset->isSecondary == FALSE)
+        // PRIMARY TILESET
+        if (skipFaded)
         {
-            if (skipFaded)
-                CpuFastCopy(tileset->palettes, &gPlttBufferUnfaded[destOffset], size); // always word-aligned
-            else
-                LoadPaletteFast(tileset->palettes, destOffset, size);
-            gPlttBufferFaded[destOffset] = gPlttBufferUnfaded[destOffset] = RGB_BLACK;
-            ApplyGlobalTintToPaletteEntries(destOffset + 1, (size - 2) >> 1);
-        }
-        else if (tileset->isSecondary == TRUE)
-        {
-            // All 'gTilesetPalettes_' arrays should have ALIGNED(4) in them,
-            // but we use SmartCopy here just in case they don't
-            if (skipFaded)
-                CpuCopy16(tileset->palettes[NUM_PALS_IN_PRIMARY], &gPlttBufferUnfaded[destOffset], size);
-            else
-                LoadPaletteFast(tileset->palettes[NUM_PALS_IN_PRIMARY], destOffset, size);
+            CpuCopy16(seasonPals[0], &gPlttBufferUnfaded[destOffset], size);
+            // Force the first entry to black in BOTH buffers, to match HEAD behavior.
+            gPlttBufferUnfaded[destOffset] = black;
+            gPlttBufferFaded[destOffset]   = black;
         }
         else
         {
-            LoadPalette((const u16 *)tileset->palettes, destOffset, size);
-            ApplyGlobalTintToPaletteEntries(destOffset, size >> 1);
+            // Safe path: load first entry as black, then load the rest of the palette.
+            LoadPalette(&black, destOffset, PLTT_SIZEOF(1));
+            // Load everything except the first color (which we pinned to black).
+            LoadPaletteFast(seasonPals[0] + 1, destOffset + 1, size - PLTT_SIZEOF(1));
         }
+
+        // Tint all entries EXCEPT the first (reserved black).
+        ApplyGlobalTintToPaletteEntries(destOffset + 1, (size - PLTT_SIZEOF(1)) >> 1);
+    }
+    else if (tileset->isSecondary == TRUE)
+    {
+        // SECONDARY TILESET
+        // Secondary palettes start after NUM_PALS_IN_PRIMARY in the same bank.
+        const u16 *src = seasonPals[NUM_PALS_IN_PRIMARY];
+
+        if (skipFaded)
+        {
+            // Some secondary arrays may lack ALIGNED(4); CpuCopy16 is safest.
+            CpuCopy16(src, &gPlttBufferUnfaded[destOffset], size);
+        }
+        else
+        {
+            LoadPaletteFast(src, destOffset, size);
+        }
+
+        // For secondary, tint the full loaded range.
+        ApplyGlobalTintToPaletteEntries(destOffset, size >> 1);
+    }
+    else
+    {
+        // COMPRESSED (fallback / special cases)
+        // Respect seasons for the compressed blob too.
+        LoadPalette(seasonPalsCompressed, destOffset, size);
+
+        // For compressed loads, tint the full loaded range.
+        ApplyGlobalTintToPaletteEntries(destOffset, size >> 1);
     }
 }
 
