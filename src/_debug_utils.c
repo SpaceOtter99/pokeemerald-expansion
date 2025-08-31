@@ -3,7 +3,9 @@
 #include "gba/isagbprint.h"   // <— needed for MgbaPrintf
 #include "mini_printf.h"
 #include "_debug_utils.h"
+#include "daycare.h"
 #include "constants/characters.h"
+#include "constants/moves.h"
 #include <stdarg.h>
 #include <stddef.h>
 
@@ -195,7 +197,7 @@ static u16 crc16_ccitt(const u8 *p, size_t n)
 }
 
 // Base64url (no padding)
-static const char sB64Url[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+static const char sB64Url[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 static size_t b64url_encode(const u8 *in, size_t inLen, char *out, size_t outCap)
 {
@@ -224,8 +226,8 @@ static u8 b64url_rev(char c)
     if (c >= 'A' && c <= 'Z') return (u8)(c - 'A');
     if (c >= 'a' && c <= 'z') return (u8)(26 + c - 'a');
     if (c >= '0' && c <= '9') return (u8)(52 + c - '0');
-    if (c == '-') return 62;
-    if (c == '_') return 63;
+    if (c == '+') return 62; // '+'
+    if (c == '/') return 63; // '/'
     return 0xFF;
 }
 
@@ -614,6 +616,92 @@ static void ApplyNick12ToBox(struct BoxPokemon *b, struct PokemonSubstruct0 *s0,
     s0->nickname12 = (len > 11) ? nick12[11] : EOS;
 }
 
+// ---------- Per-species move list (built at runtime) ----------
+#define MOVE_LOCAL_BITS     7
+#define MOVE_LOCAL_ESCAPE   ((1u << MOVE_LOCAL_BITS) - 1)
+#define MOVE_LIST_CAP       127
+
+// Some repos use MOVE_NONE=0; many lists also end with 0xFFFF. Accept both.
+static inline bool8 MoveListEnd(u16 m) { return (m == LEVEL_UP_MOVE_END || m == MOVE_UNAVAILABLE || m == MOVE_NONE); }
+
+// Small helpers
+static inline bool8 u16_contains(const u16 *a, u8 n, u16 v)
+{
+    for (u8 i = 0; i < n; i++) if (a[i] == v) return TRUE;
+    return FALSE;
+}
+
+static void u16_isort(u16 *a, u8 n)   // stable enough, n ≤ 127
+{
+    for (u8 i = 1; i < n; i++)
+    {
+        u16 x = a[i]; u8 j = i;
+        while (j && a[j-1] > x) { a[j] = a[j-1]; j--; }
+        a[j] = x;
+    }
+}
+
+// Build union of level-up, teachable, and (pre-evo) egg moves.
+// Returns count (≤127) and fills 'out' sorted ascending and deduped.
+static u8 Trade_BuildSpeciesMoveList(u16 species, u16 out[MOVE_LIST_CAP])
+{
+    u8 n = 0;
+
+    // 1) Level-up (this species)
+    const struct LevelUpMove *lvl = GetSpeciesLevelUpLearnset(species);
+    for (; !MoveListEnd(lvl->move); lvl++)
+    {
+        u16 m = lvl->move;
+        if (m != MOVE_NONE && !u16_contains(out, n, m) && n < MOVE_LIST_CAP) out[n++] = m;
+    }
+
+    // 2) Teachable (this species)
+    const u16 *teach = GetSpeciesTeachableLearnset(species);
+    for (; !MoveListEnd(*teach); teach++)
+    {
+        u16 m = *teach;
+        if (m != MOVE_NONE && !u16_contains(out, n, m) && n < MOVE_LIST_CAP) out[n++] = m;
+    }
+
+    // 3) Egg moves (use egg species for backtracking to lowest hatchable form)
+    {
+        u16 eggSp = GetEggSpecies(species);
+        const u16 *egg = GetSpeciesEggMoves(eggSp);
+        for (; !MoveListEnd(*egg); egg++)
+        {
+            u16 m = *egg;
+            if (m != MOVE_NONE && !u16_contains(out, n, m) && n < MOVE_LIST_CAP) out[n++] = m;
+        }
+    }
+
+    // Sort for stable indices (and to enable binary search if desired)
+    u16_isort(out, n);
+    return n;
+}
+
+// Map global move → per-species 7-bit index; 0xFF if not representable.
+static u8 Trade_MoveToLocalIndex(u16 species, u16 move)
+{
+    if (move == MOVE_NONE) return 0xFF;
+    u16 list[MOVE_LIST_CAP];
+    u8 len = Trade_BuildSpeciesMoveList(species, list);
+
+    // Linear search is fine for ≤127; switch to binary if you prefer.
+    for (u8 i = 0; i < len; i++) if (list[i] == move) return i;
+    return 0xFF; // not in table -> must use escape + raw 11b move
+}
+
+// Map per-species 7-bit index → global move. Returns FALSE if invalid.
+static bool8 Trade_LocalIndexToMove(u16 species, u8 idx, u16 *outMove)
+{
+    u16 list[MOVE_LIST_CAP];
+    u8 len = Trade_BuildSpeciesMoveList(species, list);
+    if (idx >= len) return FALSE;
+    *outMove = list[idx];
+    return TRUE;
+}
+
+
 
 
 // ---------------- v1 wire format (lean) ----------------
@@ -621,22 +709,28 @@ static void ApplyNick12ToBox(struct BoxPokemon *b, struct PokemonSubstruct0 *s0,
 //
 // Header:
 //   ver:5  = 1
-//   flags:8  (see below)
+//   flags:8  (bit0 HAS_NICKNAME, bit1 HAS_TERA, bit2 HAS_DMAX, bit3 GMAX,
+//             bit4 HAS_PPUPS, bit5 SHINY_WANTED, bit6 NATURE_OVR, bit7 IS_EGG)
 //
 // Core:
-//   species:11
-//   level:7
+//   species:11   (Max: 1524)
+//   level:7      (Max: 100)
 //   pid:32
+//   otId:32
 //   abilityNum:2
 //   [if NATURE_OVR] nature:5
 //
 // Moves:
 //   moveCountMinus1:2
-//   moves[ count ]: each 11
+//   moves[ count ]: each 11    (Max: 933)
 //   [if HAS_PPUPS] ppUps[ count ]: each 2
 //
-// EVs (/4):
-//   evQ[6]: each 6 (HP,Atk,Def,Spe,SpA,SpD)
+// EVs (/4), compressed:
+//   evMode:2
+//     00 = ALLZERO              -> (no further EV bits)
+//     01 = COMP252 (252/252/4): -> pairMask:6 (two stats = 63), smallIdx:3 (one stat = 1)
+//     10 = SPARSE:              -> maskNonZero:6, then for each set bit evQ[i]:6
+//     11 = (reserved)
 //
 // IVs (compact):
 //   maskNon31:6
@@ -652,11 +746,27 @@ static void ApplyNick12ToBox(struct BoxPokemon *b, struct PokemonSubstruct0 *s0,
 //   if friendCustom=1 -> friendVal:8
 //   else              -> friendFull:1  (1=255,0=0)
 //
-// Nickname (7-bit clean):
-//   hasNickname:1
-//   if hasNickname -> len:4 (0..10), then len×7-bit chars
+// Nickname (present iff HAS_NICKNAME and nickname != species):
+//   nameMode:1              0=6-bit alphabet, 1=raw-8
+//   if 6-bit  -> stream of 6-bit chars (A–Z,a–z,0–9,space=62), then terminator=63
+//   if raw-8  -> stream of bytes, then terminator=0xFF
 //
-// Finally: CRC16-CCITT appended (little endian)
+// OT name (always present):
+//   nameMode:1              0=6-bit alphabet, 1=raw-8
+//   payload encoded like Nickname, with the same terminators
+//
+// Met / Pokerus / Evolution:
+//   metLocation:8
+//   metLevel:7
+//   hasPokerus:1
+//     if hasPokerus=1 -> days2:2   (actual days = days2+1, i.e. 1..4; strain dropped)
+//     else            -> hadPokerus:1  (marks cured via strain=1)
+//   hasEvo:1
+//     if hasEvo=1 -> hasEvo2:1, evo1:5, [if hasEvo2] evo2:5
+//
+// Finally:
+//   CRC16-CCITT (init 0xFFFF, poly 0x1021) appended little-endian over all prior bytes.
+//   (Bitstream is byte-aligned; any pad bits in the last data byte are zero.)
 
 enum {
     FL_HAS_NICKNAME   = 1<<0,
@@ -782,9 +892,21 @@ static size_t pack_v1(const struct Pokemon *mon, u8 *out, size_t cap)
     if (hasNatureOverride)
         if (!bw_put(&w, realNature, 5)) return 0;
 
-    if (!bw_put(&w, (u32)(count-1), 2)) return 0;
-    for (u32 i=0;i<count;i++) if (!bw_put(&w, mv[i] & 2047u, 11)) return 0;
-    if (hasPPUps) for (u32 i=0;i<count;i++) if (!bw_put(&w, ppUps[i] & 3u, 2)) return 0;
+    // Moves (per-species 7-bit indices with escape to 11-bit global move)
+    if (!bw_put(&w, (u32)(count - 1), 2)) return 0;
+    for (u32 i = 0; i < count; i++)
+    {
+        u8 midx = Trade_MoveToLocalIndex(species, mv[i]);
+        if (midx != 0xFF) {
+            if (!bw_put(&w, midx, MOVE_LOCAL_BITS)) return 0;
+        } else {
+            if (!bw_put(&w, MOVE_LOCAL_ESCAPE, MOVE_LOCAL_BITS)) return 0;
+            if (!bw_put(&w, mv[i] & 2047u, 11)) return 0; // raw fallback
+        }
+    }
+    if (hasPPUps)
+        for (u32 i = 0; i < count; i++)
+            if (!bw_put(&w, ppUps[i] & 3u, 2)) return 0;
 
     if (!bw_put_evs(&w, evQ)) return 0;
 
@@ -873,11 +995,21 @@ static bool8 unpack_v1_into(const u8 *in, size_t inLen, struct Pokemon *dst)
     const u8 natureVal  = natOverride ? (u8)br_get(&r,5) : pidNature;
 
     // Moves
-    u8 count = (u8)br_get(&r,2) + 1; if (count > 4) return 0;
+    u8 count = (u8)br_get(&r, 2) + 1; if (count > 4) return 0;
     u16 mv[4] = {0,0,0,0};
-    for (u32 i=0;i<count;i++) mv[i] = (u16)br_get(&r,11);
+    for (u32 i = 0; i < count; i++)
+    {
+        u8 midx = (u8)br_get(&r, MOVE_LOCAL_BITS);
+        if (midx == MOVE_LOCAL_ESCAPE) {
+            mv[i] = (u16)br_get(&r, 11);
+        } else {
+            u16 m;
+            if (!Trade_LocalIndexToMove(species, midx, &m)) return 0;
+            mv[i] = m;
+        }
+    }
     u8 ppUps[4] = {0,0,0,0};
-    if (hasPPUps) for (u32 i=0;i<count;i++) ppUps[i] = (u8)br_get(&r,2);
+    if (hasPPUps) for (u32 i = 0; i < count; i++) ppUps[i] = (u8)br_get(&r, 2);
 
     // EV quartersu8 evQ[6];
     u8 evQ[6];
