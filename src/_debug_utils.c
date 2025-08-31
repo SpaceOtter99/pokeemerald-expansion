@@ -13,6 +13,13 @@
 #define ARRAY_COUNT(a) (sizeof(a) / sizeof((a)[0]))
 #endif
 
+static const u8 sSubstructOrder[24][4] = {
+    {0,1,2,3},{0,1,3,2},{0,2,1,3},{0,3,1,2},{0,2,3,1},{0,3,2,1},
+    {1,0,2,3},{1,0,3,2},{2,0,1,3},{3,0,1,2},{2,0,3,1},{3,0,2,1},
+    {1,2,0,3},{1,3,0,2},{2,1,0,3},{3,1,0,2},{2,3,0,1},{3,2,0,1},
+    {1,2,3,0},{1,3,2,0},{2,1,3,0},{3,1,2,0},{2,3,1,0},{3,2,1,0},
+};
+
 // ---------------------------------------------------------------------
 // small local utils (no libc deps)
 // ---------------------------------------------------------------------
@@ -46,208 +53,6 @@ static void DumpHexU8(int level, const char *label, const u8 *buf, size_t len)
     }
 }
 
-static void DumpHexU32(int level, const char *label, const u32 *buf, size_t count)
-{
-    char line[128];
-    MgbaPrintf(level, "%s (u32 words=%u):", label, (unsigned)count);
-    for (size_t i = 0; i < count; i += 8)
-    {
-        size_t n = (count - i > 8) ? 8 : (count - i);
-        int pos = mini_snprintf_wrap(line, sizeof(line), "  %03u: ", (unsigned)i);
-        for (size_t j = 0; j < n && pos < (int)sizeof(line); j++)
-            pos += mini_snprintf_wrap(line + pos, sizeof(line) - pos, "%08X ", (unsigned)buf[i + j]);
-        MgbaPrintf(level, "%s", line);
-    }
-}
-
-
-static const u8 sSubstructOrder[24][4] = {
-    {0,1,2,3},{0,1,3,2},{0,2,1,3},{0,3,1,2},{0,2,3,1},{0,3,2,1},
-    {1,0,2,3},{1,0,3,2},{2,0,1,3},{3,0,1,2},{2,0,3,1},{3,0,2,1},
-    {1,2,0,3},{1,3,0,2},{2,1,0,3},{3,1,0,2},{2,3,0,1},{3,2,0,1},
-    {1,2,3,0},{1,3,2,0},{2,1,3,0},{3,1,2,0},{2,3,1,0},{3,2,1,0},
-};
-
-static void DumpSubstruct0(int level, const struct PokemonSubstruct0 *s)
-{
-    MgbaPrintf(level, "  Substruct0 (Growth) {");
-    MgbaPrintf(level, "    species=%u, teraType=%u, heldItem=%u", s->species, s->teraType, s->heldItem);
-    MgbaPrintf(level, "    experience=%u, ppBonuses=0x%02X, friendship=%u", s->experience, s->ppBonuses, s->friendship);
-    MgbaPrintf(level, "    pokeball=%u, nickname11=%u, nickname12=%u", s->pokeball, s->nickname11, s->nickname12);
-    MgbaPrintf(level, "  }");
-}
-
-static void DumpSubstruct1(int level, const struct PokemonSubstruct1 *s)
-{
-    MgbaPrintf(level, "  Substruct1 (Attacks/PP/HyperTrain) {");
-    MgbaPrintf(level, "    move1=%u, move2=%u, move3=%u, move4=%u",
-               s->move1, s->move2, s->move3, s->move4);
-    MgbaPrintf(level, "    pp1=%u, pp2=%u, pp3=%u, pp4=%u",
-               s->pp1, s->pp2, s->pp3, s->pp4);
-    MgbaPrintf(level, "    HT: HP=%u Atk=%u Def=%u Spe=%u SpA=%u SpD=%u",
-               s->hyperTrainedHP, s->hyperTrainedAttack, s->hyperTrainedDefense,
-               s->hyperTrainedSpeed, s->hyperTrainedSpAttack, s->hyperTrainedSpDefense);
-    MgbaPrintf(level, "    evoTrack1=%u, evoTrack2=%u", s->evolutionTracker1, s->evolutionTracker2);
-    MgbaPrintf(level, "  }");
-}
-
-static void DumpSubstruct2(int level, const struct PokemonSubstruct2 *s)
-{
-    MgbaPrintf(level, "  Substruct2 (EVs/Contest) {");
-    MgbaPrintf(level, "    EVs: HP=%u Atk=%u Def=%u Spe=%u SpA=%u SpD=%u",
-               s->hpEV, s->attackEV, s->defenseEV, s->speedEV, s->spAttackEV, s->spDefenseEV);
-    MgbaPrintf(level, "    Contest: cool=%u beauty=%u cute=%u smart=%u tough=%u sheen=%u",
-               s->cool, s->beauty, s->cute, s->smart, s->tough, s->sheen);
-    MgbaPrintf(level, "  }");
-}
-
-static void DumpSubstruct3(int level, const struct PokemonSubstruct3 *s)
-{
-    MgbaPrintf(level, "  Substruct3 (Misc/IVs/Ribbons) {");
-    MgbaPrintf(level, "    pokerus=0x%02X, metLocation=%u, metLevel=%u, metGame=%u, dynamaxLevel=%u, otGender=%u",
-               s->pokerus, s->metLocation, s->metLevel, s->metGame, s->dynamaxLevel, s->otGender);
-    MgbaPrintf(level, "    IVs: HP=%u Atk=%u Def=%u Spe=%u SpA=%u SpD=%u",
-               s->hpIV, s->attackIV, s->defenseIV, s->speedIV, s->spAttackIV, s->spDefenseIV);
-    MgbaPrintf(level, "    flags: isEgg=%u gMax=%u isShadow=%u abilityNum=%u fateful=%u",
-               s->isEgg, s->gigantamaxFactor, s->isShadow, s->abilityNum, s->modernFatefulEncounter);
-    MgbaPrintf(level, "    ribbons: cool=%u beauty=%u cute=%u smart=%u tough=%u | champ=%u win=%u vict=%u artist=%u effort=%u",
-               s->coolRibbon, s->beautyRibbon, s->cuteRibbon, s->smartRibbon, s->toughRibbon,
-               s->championRibbon, s->winningRibbon, s->victoryRibbon, s->artistRibbon, s->effortRibbon);
-    MgbaPrintf(level, "    ribbons: marine=%u land=%u sky=%u country=%u national=%u earth=%u world=%u",
-               s->marineRibbon, s->landRibbon, s->skyRibbon, s->countryRibbon,
-               s->nationalRibbon, s->earthRibbon, s->worldRibbon);
-    MgbaPrintf(level, "  }");
-}
-
-static void DumpDecryptedSubstructs(int level, const struct BoxPokemon *b)
-{
-    u32 key = b->personality ^ b->otId;
-
-    enum { WORDS = (NUM_SUBSTRUCT_BYTES * 4) / 4 };
-    u32 tmp[WORDS];
-    const u32 *src = (const u32 *)b->secure.raw;
-    for (u32 i = 0; i < WORDS; i++)
-        tmp[i] = src[i] ^ key;
-
-    const union PokemonSubstruct *dec = (const union PokemonSubstruct *)tmp;
-
-    const u8 *ord = sSubstructOrder[b->personality % 24];
-    int idxOf[4] = {-1,-1,-1,-1};
-    for (int slot = 0; slot < 4; slot++)
-        idxOf[ord[slot]] = slot;
-
-    MgbaPrintf(level, "  secure (decrypted) { key=0x%08X, order=[%u,%u,%u,%u] }",
-               (unsigned)key, ord[0], ord[1], ord[2], ord[3]);
-
-    DumpSubstruct0(level, &dec[idxOf[0]].type0);
-    DumpSubstruct1(level, &dec[idxOf[1]].type1);
-    DumpSubstruct2(level, &dec[idxOf[2]].type2);
-    DumpSubstruct3(level, &dec[idxOf[3]].type3);
-}
-
-static void DumpBoxPokemon(int level, const struct BoxPokemon *b)
-{
-    MgbaPrintf(level, "BoxPokemon {");
-    MgbaPrintf(level, "  personality: 0x%08X", (unsigned)b->personality);
-    MgbaPrintf(level, "  otId:        0x%08X", (unsigned)b->otId);
-
-    DumpHexU8(level, "  nickname", b->nickname, ARRAY_COUNT(b->nickname));
-
-    MgbaPrintf(level, "  language: %u", b->language);
-    MgbaPrintf(level, "  hiddenNatureModifier: %u", b->hiddenNatureModifier);
-
-    MgbaPrintf(level, "  isBadEgg: %u", b->isBadEgg);
-    MgbaPrintf(level, "  hasSpecies: %u", b->hasSpecies);
-    MgbaPrintf(level, "  isEgg: %u", b->isEgg);
-    MgbaPrintf(level, "  blockBoxRS: %u", b->blockBoxRS);
-    MgbaPrintf(level, "  daysSinceFormChange: %u", b->daysSinceFormChange);
-    MgbaPrintf(level, "  unused_13: %u", b->unused_13);
-
-    DumpHexU8(level, "  otName", b->otName, ARRAY_COUNT(b->otName));
-
-    MgbaPrintf(level, "  markings: %u", b->markings);
-    MgbaPrintf(level, "  compressedStatus: %u", b->compressedStatus);
-    MgbaPrintf(level, "  checksum: 0x%04X", b->checksum);
-
-    MgbaPrintf(level, "  hpLost: %u", b->hpLost);
-    MgbaPrintf(level, "  shinyModifier: %u", b->shinyModifier);
-    MgbaPrintf(level, "  unused_1E: %u", b->unused_1E);
-
-    DumpDecryptedSubstructs(level, b);
-
-    DumpHexU32(level, "  secure.raw",
-               b->secure.raw,
-               ARRAY_COUNT(b->secure.raw));
-    MgbaPrintf(level, "}");
-}
-
-
-
-// CRC16-CCITT (0xFFFF, poly 0x1021)
-static u16 crc16_ccitt(const u8 *p, size_t n)
-{
-    u16 crc = 0xFFFF;
-    while (n--)
-    {
-        crc ^= (u16)(*p++) << 8;
-        for (int i = 0; i < 8; i++)
-            crc = (crc & 0x8000) ? (u16)((crc << 1) ^ 0x1021) : (u16)(crc << 1);
-    }
-    return crc;
-}
-
-// Base64url (no padding)
-static const char sB64Url[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
-static size_t b64url_encode(const u8 *in, size_t inLen, char *out, size_t outCap)
-{
-    size_t o = 0;
-    for (size_t i = 0; i < inLen; i += 3)
-    {
-        u32 v = in[i] << 16;
-        if (i + 1 < inLen) v |= in[i+1] << 8;
-        if (i + 2 < inLen) v |= in[i+2];
-
-        char c1 = sB64Url[(v >> 18) & 63];
-        char c2 = sB64Url[(v >> 12) & 63];
-        char c3 = (i + 1 < inLen) ? sB64Url[(v >> 6) & 63] : 0;
-        char c4 = (i + 2 < inLen) ? sB64Url[(v >> 0) & 63] : 0;
-
-        if (o + 2 > outCap) return 0; out[o++] = c1; out[o++] = c2;
-        if (c3){ if (o + 1 > outCap) return 0; out[o++] = c3; }
-        if (c4){ if (o + 1 > outCap) return 0; out[o++] = c4; }
-    }
-    if (o < outCap) out[o] = 0;
-    return o;
-}
-
-static u8 b64url_rev(char c)
-{
-    if (c >= 'A' && c <= 'Z') return (u8)(c - 'A');
-    if (c >= 'a' && c <= 'z') return (u8)(26 + c - 'a');
-    if (c >= '0' && c <= '9') return (u8)(52 + c - '0');
-    if (c == '+') return 62; // '+'
-    if (c == '/') return 63; // '/'
-    return 0xFF;
-}
-
-static size_t b64url_decode(const char *in, u8 *out, size_t outCap)
-{
-    size_t o = 0;
-    u32 acc = 0; int bits = 0;
-    for (const char *p = in; *p; ++p)
-    {
-        u8 v = b64url_rev(*p);
-        if (v == 0xFF) return 0;
-        acc = (acc << 6) | v; bits += 6;
-        if (bits >= 8) {
-            bits -= 8;
-            if (o >= outCap) return 0;
-            out[o++] = (u8)((acc >> bits) & 0xFF);
-        }
-    }
-    return o;
-}
 
 // Bit writer/reader (LSB-first)
 typedef struct { u8 *buf; size_t cap; size_t bit; } BitW;
@@ -327,135 +132,6 @@ static u8 get_otname(const struct BoxPokemon *b, u8 out[], u8 maxLen)
     for (int i=0;i<maxLen;i++){ out[i]=b->otName[i]; if (out[i]==0xFF){ len = i; break; } }
     return (u8)len;
 }
-
-// ---------------- v1 wire format ----------------
-#define TRADE_V1        1
-#define TRADE_NICK_MAX  12
-#define TRADE_OT_MAX    PLAYER_NAME_LENGTH
-
-// ---- helpers for compact IV coding (masks + 5b values) ----
-static void ivs_to_masks_vals(const struct PokemonSubstruct3 *s3,
-                              u8 *maskNon31, u8 *maskNonZero,
-                              u8 vals[6], u8 *valsCount)
-{
-    u8 iv[6] = {
-        (u8)s3->hpIV, (u8)s3->attackIV, (u8)s3->defenseIV,
-        (u8)s3->speedIV, (u8)s3->spAttackIV, (u8)s3->spDefenseIV
-    };
-    u8 m31 = 0, m0 = 0, n = 0;
-    for (u32 i=0;i<6;i++) if (iv[i] != 31) m31 |= (1u<<i);
-    for (u32 i=0;i<6;i++) if ((m31 & (1u<<i)) && iv[i] != 0) m0 |= (1u<<i);
-    for (u32 i=0;i<6;i++) if ((m31 & (1u<<i)) && (m0 & (1u<<i))) vals[n++] = (u8)(iv[i] & 31);
-    *maskNon31 = m31; *maskNonZero = m0; *valsCount = n;
-}
-
-static void ivs_from_masks_vals(u8 maskNon31, u8 maskNonZero,
-                                const u8 *vals, u8 out[6])
-{
-    for (u32 i=0;i<6;i++) out[i] = 31;
-    u8 k = 0;
-    for (u32 i=0;i<6;i++)
-    {
-        if (maskNon31 & (1u<<i))
-            out[i] = (maskNonZero & (1u<<i)) ? (vals[k++] & 31) : 0;
-    }
-}
-
-enum { EV_ENC_ALLZERO = 0, EV_ENC_COMP252 = 1, EV_ENC_SPARSE = 2 };
-
-static inline bool8 evq_all_zero(const u8 evQ[6])
-{
-    for (int i = 0; i < 6; i++) if (evQ[i] != 0) return FALSE;
-    return TRUE;
-}
-
-// Detect exactly: two stats = 63 and one stat = 1; all others = 0
-static bool8 evq_try_comp252(const u8 evQ[6], u8 *outPairMask, u8 *outSmallIdx)
-{
-    u8 nMax = 0, maxMask = 0, smallIdx = 0xFF;
-    for (int i = 0; i < 6; i++)
-    {
-        if (evQ[i] == 63) { maxMask |= (1u << i); nMax++; }
-        else if (evQ[i] == 1) { if (smallIdx != 0xFF) return FALSE; smallIdx = (u8)i; }
-        else if (evQ[i] != 0) return FALSE; // anything else breaks the COMP case
-    }
-    if (nMax == 2 && smallIdx != 0xFF)
-    {
-        *outPairMask = maxMask;
-        *outSmallIdx = smallIdx;
-        return TRUE;
-    }
-    return FALSE;
-}
-
-// Write compressed EVs
-static bool8 bw_put_evs(BitW *w, const u8 evQ[6])
-{
-    // Mode select
-    if (evq_all_zero(evQ))
-    {
-        // mode (2b) = 00
-        if (!bw_put(w, EV_ENC_ALLZERO, 2)) return FALSE;
-        return TRUE;
-    }
-
-    u8 pairMask = 0, smallIdx = 0;
-    if (evq_try_comp252(evQ, &pairMask, &smallIdx))
-    {
-        // mode (2b) = 01, then pairMask(6b), smallIdx(3b)
-        if (!bw_put(w, EV_ENC_COMP252, 2)) return FALSE;
-        if (!bw_put(w, pairMask & 0x3Fu, 6)) return FALSE;
-        if (!bw_put(w, smallIdx & 0x07u, 3)) return FALSE;
-        return TRUE;
-    }
-
-    // General sparse: mode (2b) = 10, maskNonZero(6b), then values(6b each)
-    if (!bw_put(w, EV_ENC_SPARSE, 2)) return FALSE;
-
-    u8 mask = 0;
-    for (int i = 0; i < 6; i++) if (evQ[i] != 0) mask |= (1u << i);
-    if (!bw_put(w, mask & 0x3Fu, 6)) return FALSE;
-    for (int i = 0; i < 6; i++)
-        if (mask & (1u << i))
-            if (!bw_put(w, evQ[i] & 63u, 6)) return FALSE;
-
-    return TRUE;
-}
-
-// Read compressed EVs
-static bool8 br_get_evs(BitR *r, u8 outEvQ[6])
-{
-    u8 mode = (u8)br_get(r, 2);
-    for (int i = 0; i < 6; i++) outEvQ[i] = 0; // default zero
-
-    if (mode == EV_ENC_ALLZERO)
-    {
-        return r->err ? FALSE : TRUE;
-    }
-    else if (mode == EV_ENC_COMP252)
-    {
-        u8 pairMask = (u8)br_get(r, 6);
-        u8 smallIdx = (u8)br_get(r, 3);
-        if (r->err) return FALSE;
-        for (int i = 0; i < 6; i++) if (pairMask & (1u << i)) outEvQ[i] = 63;
-        if (smallIdx < 6 && !(pairMask & (1u << smallIdx))) outEvQ[smallIdx] = 1;
-        return TRUE;
-    }
-    else if (mode == EV_ENC_SPARSE)
-    {
-        u8 mask = (u8)br_get(r, 6);
-        if (r->err) return FALSE;
-        for (int i = 0; i < 6; i++)
-            if (mask & (1u << i))
-                outEvQ[i] = (u8)br_get(r, 6);
-        return r->err ? FALSE : TRUE;
-    }
-
-    // Unknown mode
-    r->err = 1;
-    return FALSE;
-}
-
 
 // ---------------- text helpers: ASCII<->game string + 6-bit alphabet ----------------
 
@@ -614,6 +290,344 @@ static void ApplyNick12ToBox(struct BoxPokemon *b, struct PokemonSubstruct0 *s0,
     // Remaining 2 live inside substruct0
     s0->nickname11 = (len > 10) ? nick12[10] : EOS;
     s0->nickname12 = (len > 11) ? nick12[11] : EOS;
+}
+
+static void DumpHexU32(int level, const char *label, const u32 *buf, size_t count)
+{
+    char line[128];
+    MgbaPrintf(level, "%s (u32 words=%u):", label, (unsigned)count);
+    for (size_t i = 0; i < count; i += 8)
+    {
+        size_t n = (count - i > 8) ? 8 : (count - i);
+        int pos = mini_snprintf_wrap(line, sizeof(line), "  %03u: ", (unsigned)i);
+        for (size_t j = 0; j < n && pos < (int)sizeof(line); j++)
+            pos += mini_snprintf_wrap(line + pos, sizeof(line) - pos, "%08X ", (unsigned)buf[i + j]);
+        MgbaPrintf(level, "%s", line);
+    }
+}
+
+static void DumpSubstruct0(int level, const struct PokemonSubstruct0 *s)
+{
+    MgbaPrintf(level, "  Substruct0 (Growth) {");
+    MgbaPrintf(level, "    species=%u, teraType=%u, heldItem=%u", s->species, s->teraType, s->heldItem);
+    MgbaPrintf(level, "    experience=%u, ppBonuses=0x%02X, friendship=%u", s->experience, s->ppBonuses, s->friendship);
+    MgbaPrintf(level, "    pokeball=%u, nickname11=%u, nickname12=%u", s->pokeball, s->nickname11, s->nickname12);
+    MgbaPrintf(level, "  }");
+}
+
+static void DumpSubstruct1(int level, const struct PokemonSubstruct1 *s)
+{
+    MgbaPrintf(level, "  Substruct1 (Attacks/PP/HyperTrain) {");
+    MgbaPrintf(level, "    move1=%u, move2=%u, move3=%u, move4=%u",
+               s->move1, s->move2, s->move3, s->move4);
+    MgbaPrintf(level, "    pp1=%u, pp2=%u, pp3=%u, pp4=%u",
+               s->pp1, s->pp2, s->pp3, s->pp4);
+    MgbaPrintf(level, "    HT: HP=%u Atk=%u Def=%u Spe=%u SpA=%u SpD=%u",
+               s->hyperTrainedHP, s->hyperTrainedAttack, s->hyperTrainedDefense,
+               s->hyperTrainedSpeed, s->hyperTrainedSpAttack, s->hyperTrainedSpDefense);
+    MgbaPrintf(level, "    evoTrack1=%u, evoTrack2=%u", s->evolutionTracker1, s->evolutionTracker2);
+    MgbaPrintf(level, "  }");
+}
+
+static void DumpSubstruct2(int level, const struct PokemonSubstruct2 *s)
+{
+    MgbaPrintf(level, "  Substruct2 (EVs/Contest) {");
+    MgbaPrintf(level, "    EVs: HP=%u Atk=%u Def=%u Spe=%u SpA=%u SpD=%u",
+               s->hpEV, s->attackEV, s->defenseEV, s->speedEV, s->spAttackEV, s->spDefenseEV);
+    MgbaPrintf(level, "    Contest: cool=%u beauty=%u cute=%u smart=%u tough=%u sheen=%u",
+               s->cool, s->beauty, s->cute, s->smart, s->tough, s->sheen);
+    MgbaPrintf(level, "  }");
+}
+
+static void DumpSubstruct3(int level, const struct PokemonSubstruct3 *s)
+{
+    MgbaPrintf(level, "  Substruct3 (Misc/IVs/Ribbons) {");
+    MgbaPrintf(level, "    pokerus=0x%02X, metLocation=%u, metLevel=%u, metGame=%u, dynamaxLevel=%u, otGender=%u",
+               s->pokerus, s->metLocation, s->metLevel, s->metGame, s->dynamaxLevel, s->otGender);
+    MgbaPrintf(level, "    IVs: HP=%u Atk=%u Def=%u Spe=%u SpA=%u SpD=%u",
+               s->hpIV, s->attackIV, s->defenseIV, s->speedIV, s->spAttackIV, s->spDefenseIV);
+    MgbaPrintf(level, "    flags: isEgg=%u gMax=%u isShadow=%u abilityNum=%u fateful=%u",
+               s->isEgg, s->gigantamaxFactor, s->isShadow, s->abilityNum, s->modernFatefulEncounter);
+    MgbaPrintf(level, "    ribbons: cool=%u beauty=%u cute=%u smart=%u tough=%u | champ=%u win=%u vict=%u artist=%u effort=%u",
+               s->coolRibbon, s->beautyRibbon, s->cuteRibbon, s->smartRibbon, s->toughRibbon,
+               s->championRibbon, s->winningRibbon, s->victoryRibbon, s->artistRibbon, s->effortRibbon);
+    MgbaPrintf(level, "    ribbons: marine=%u land=%u sky=%u country=%u national=%u earth=%u world=%u",
+               s->marineRibbon, s->landRibbon, s->skyRibbon, s->countryRibbon,
+               s->nationalRibbon, s->earthRibbon, s->worldRibbon);
+    MgbaPrintf(level, "  }");
+}
+
+static void DumpDecryptedSubstructs(int level, const struct BoxPokemon *b)
+{
+    u32 key = b->personality ^ b->otId;
+
+    enum { WORDS = (NUM_SUBSTRUCT_BYTES * 4) / 4 };
+    u32 tmp[WORDS];
+    const u32 *src = (const u32 *)b->secure.raw;
+    for (u32 i = 0; i < WORDS; i++)
+        tmp[i] = src[i] ^ key;
+
+    const union PokemonSubstruct *dec = (const union PokemonSubstruct *)tmp;
+
+    const u8 *ord = sSubstructOrder[b->personality % 24];
+    int idxOf[4] = {-1,-1,-1,-1};
+    for (int slot = 0; slot < 4; slot++)
+        idxOf[ord[slot]] = slot;
+
+    MgbaPrintf(level, "  secure (decrypted) { key=0x%08X, order=[%u,%u,%u,%u] }",
+               (unsigned)key, ord[0], ord[1], ord[2], ord[3]);
+
+    DumpSubstruct0(level, &dec[idxOf[0]].type0);
+    DumpSubstruct1(level, &dec[idxOf[1]].type1);
+    DumpSubstruct2(level, &dec[idxOf[2]].type2);
+    DumpSubstruct3(level, &dec[idxOf[3]].type3);
+}
+
+static void DumpNameAsciiLine(int level, const char *label, const u8 *gfBytes, u8 maxLen)
+{
+    char ascii[32];
+    u8 n = DecodeBoxStringToAscii(gfBytes, (u8 *)ascii, maxLen);
+    if (n >= sizeof(ascii)) n = sizeof(ascii) - 1;
+    ascii[n] = '\0';
+    MgbaPrintf(level, "  %s (text): \"%s\"", label, ascii);
+}
+
+static void DumpBoxPokemon(int level, const struct BoxPokemon *b)
+{
+    MgbaPrintf(level, "BoxPokemon {");
+    MgbaPrintf(level, "  personality: 0x%08X", (unsigned)b->personality);
+    MgbaPrintf(level, "  otId:        0x%08X", (unsigned)b->otId);
+
+    u8 nick12[POKEMON_NAME_LENGTH];
+    (void)get_nickname12(b, nick12);
+    DumpNameAsciiLine(level, "nickname", nick12, POKEMON_NAME_LENGTH);
+    DumpHexU8(level, "  nickname", b->nickname, ARRAY_COUNT(b->nickname));
+
+    MgbaPrintf(level, "  language: %u", b->language);
+    MgbaPrintf(level, "  hiddenNatureModifier: %u", b->hiddenNatureModifier);
+
+    MgbaPrintf(level, "  isBadEgg: %u", b->isBadEgg);
+    MgbaPrintf(level, "  hasSpecies: %u", b->hasSpecies);
+    MgbaPrintf(level, "  isEgg: %u", b->isEgg);
+    MgbaPrintf(level, "  blockBoxRS: %u", b->blockBoxRS);
+    MgbaPrintf(level, "  daysSinceFormChange: %u", b->daysSinceFormChange);
+    MgbaPrintf(level, "  unused_13: %u", b->unused_13);
+
+    u8 otRaw[PLAYER_NAME_LENGTH];
+    (void)get_otname(b, otRaw, PLAYER_NAME_LENGTH);
+    DumpNameAsciiLine(level, "otName", otRaw, PLAYER_NAME_LENGTH);
+    DumpHexU8(level, "  otName", b->otName, ARRAY_COUNT(b->otName));
+
+    MgbaPrintf(level, "  markings: %u", b->markings);
+    MgbaPrintf(level, "  compressedStatus: %u", b->compressedStatus);
+    MgbaPrintf(level, "  checksum: 0x%04X", b->checksum);
+
+    MgbaPrintf(level, "  hpLost: %u", b->hpLost);
+    MgbaPrintf(level, "  shinyModifier: %u", b->shinyModifier);
+    MgbaPrintf(level, "  unused_1E: %u", b->unused_1E);
+
+    DumpDecryptedSubstructs(level, b);
+
+    DumpHexU32(level, "  secure.raw",
+               b->secure.raw,
+               ARRAY_COUNT(b->secure.raw));
+    MgbaPrintf(level, "}");
+}
+
+
+
+// CRC16-CCITT (0xFFFF, poly 0x1021)
+static u16 crc16_ccitt(const u8 *p, size_t n)
+{
+    u16 crc = 0xFFFF;
+    while (n--)
+    {
+        crc ^= (u16)(*p++) << 8;
+        for (int i = 0; i < 8; i++)
+            crc = (crc & 0x8000) ? (u16)((crc << 1) ^ 0x1021) : (u16)(crc << 1);
+    }
+    return crc;
+}
+
+// Base64url (no padding)
+static const char sB64Url[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+static size_t b64url_encode(const u8 *in, size_t inLen, char *out, size_t outCap)
+{
+    size_t o = 0;
+    for (size_t i = 0; i < inLen; i += 3)
+    {
+        u32 v = in[i] << 16;
+        if (i + 1 < inLen) v |= in[i+1] << 8;
+        if (i + 2 < inLen) v |= in[i+2];
+
+        char c1 = sB64Url[(v >> 18) & 63];
+        char c2 = sB64Url[(v >> 12) & 63];
+        char c3 = (i + 1 < inLen) ? sB64Url[(v >> 6) & 63] : 0;
+        char c4 = (i + 2 < inLen) ? sB64Url[(v >> 0) & 63] : 0;
+
+        if (o + 2 > outCap) return 0; out[o++] = c1; out[o++] = c2;
+        if (c3){ if (o + 1 > outCap) return 0; out[o++] = c3; }
+        if (c4){ if (o + 1 > outCap) return 0; out[o++] = c4; }
+    }
+    if (o < outCap) out[o] = 0;
+    return o;
+}
+
+static u8 b64url_rev(char c)
+{
+    if (c >= 'A' && c <= 'Z') return (u8)(c - 'A');
+    if (c >= 'a' && c <= 'z') return (u8)(26 + c - 'a');
+    if (c >= '0' && c <= '9') return (u8)(52 + c - '0');
+    if (c == '+') return 62; // '+'
+    if (c == '/') return 63; // '/'
+    return 0xFF;
+}
+
+static size_t b64url_decode(const char *in, u8 *out, size_t outCap)
+{
+    size_t o = 0;
+    u32 acc = 0; int bits = 0;
+    for (const char *p = in; *p; ++p)
+    {
+        u8 v = b64url_rev(*p);
+        if (v == 0xFF) return 0;
+        acc = (acc << 6) | v; bits += 6;
+        if (bits >= 8) {
+            bits -= 8;
+            if (o >= outCap) return 0;
+            out[o++] = (u8)((acc >> bits) & 0xFF);
+        }
+    }
+    return o;
+}
+
+// ---------------- v1 wire format ----------------
+#define TRADE_V1        1
+#define TRADE_NICK_MAX  12
+#define TRADE_OT_MAX    PLAYER_NAME_LENGTH
+
+// ---- helpers for compact IV coding (masks + 5b values) ----
+static void ivs_to_masks_vals(const struct PokemonSubstruct3 *s3,
+                              u8 *maskNon31, u8 *maskNonZero,
+                              u8 vals[6], u8 *valsCount)
+{
+    u8 iv[6] = {
+        (u8)s3->hpIV, (u8)s3->attackIV, (u8)s3->defenseIV,
+        (u8)s3->speedIV, (u8)s3->spAttackIV, (u8)s3->spDefenseIV
+    };
+    u8 m31 = 0, m0 = 0, n = 0;
+    for (u32 i=0;i<6;i++) if (iv[i] != 31) m31 |= (1u<<i);
+    for (u32 i=0;i<6;i++) if ((m31 & (1u<<i)) && iv[i] != 0) m0 |= (1u<<i);
+    for (u32 i=0;i<6;i++) if ((m31 & (1u<<i)) && (m0 & (1u<<i))) vals[n++] = (u8)(iv[i] & 31);
+    *maskNon31 = m31; *maskNonZero = m0; *valsCount = n;
+}
+
+static void ivs_from_masks_vals(u8 maskNon31, u8 maskNonZero,
+                                const u8 *vals, u8 out[6])
+{
+    for (u32 i=0;i<6;i++) out[i] = 31;
+    u8 k = 0;
+    for (u32 i=0;i<6;i++)
+    {
+        if (maskNon31 & (1u<<i))
+            out[i] = (maskNonZero & (1u<<i)) ? (vals[k++] & 31) : 0;
+    }
+}
+
+enum { EV_ENC_ALLZERO = 0, EV_ENC_COMP252 = 1, EV_ENC_SPARSE = 2 };
+
+static inline bool8 evq_all_zero(const u8 evQ[6])
+{
+    for (int i = 0; i < 6; i++) if (evQ[i] != 0) return FALSE;
+    return TRUE;
+}
+
+// Detect exactly: two stats = 63 and one stat = 1; all others = 0
+static bool8 evq_try_comp252(const u8 evQ[6], u8 *outPairMask, u8 *outSmallIdx)
+{
+    u8 nMax = 0, maxMask = 0, smallIdx = 0xFF;
+    for (int i = 0; i < 6; i++)
+    {
+        if (evQ[i] == 63) { maxMask |= (1u << i); nMax++; }
+        else if (evQ[i] == 1) { if (smallIdx != 0xFF) return FALSE; smallIdx = (u8)i; }
+        else if (evQ[i] != 0) return FALSE; // anything else breaks the COMP case
+    }
+    if (nMax == 2 && smallIdx != 0xFF)
+    {
+        *outPairMask = maxMask;
+        *outSmallIdx = smallIdx;
+        return TRUE;
+    }
+    return FALSE;
+}
+
+// Write compressed EVs
+static bool8 bw_put_evs(BitW *w, const u8 evQ[6])
+{
+    // Mode select
+    if (evq_all_zero(evQ))
+    {
+        // mode (2b) = 00
+        if (!bw_put(w, EV_ENC_ALLZERO, 2)) return FALSE;
+        return TRUE;
+    }
+
+    u8 pairMask = 0, smallIdx = 0;
+    if (evq_try_comp252(evQ, &pairMask, &smallIdx))
+    {
+        // mode (2b) = 01, then pairMask(6b), smallIdx(3b)
+        if (!bw_put(w, EV_ENC_COMP252, 2)) return FALSE;
+        if (!bw_put(w, pairMask & 0x3Fu, 6)) return FALSE;
+        if (!bw_put(w, smallIdx & 0x07u, 3)) return FALSE;
+        return TRUE;
+    }
+
+    // General sparse: mode (2b) = 10, maskNonZero(6b), then values(6b each)
+    if (!bw_put(w, EV_ENC_SPARSE, 2)) return FALSE;
+
+    u8 mask = 0;
+    for (int i = 0; i < 6; i++) if (evQ[i] != 0) mask |= (1u << i);
+    if (!bw_put(w, mask & 0x3Fu, 6)) return FALSE;
+    for (int i = 0; i < 6; i++)
+        if (mask & (1u << i))
+            if (!bw_put(w, evQ[i] & 63u, 6)) return FALSE;
+
+    return TRUE;
+}
+
+// Read compressed EVs
+static bool8 br_get_evs(BitR *r, u8 outEvQ[6])
+{
+    u8 mode = (u8)br_get(r, 2);
+    for (int i = 0; i < 6; i++) outEvQ[i] = 0; // default zero
+
+    if (mode == EV_ENC_ALLZERO)
+    {
+        return r->err ? FALSE : TRUE;
+    }
+    else if (mode == EV_ENC_COMP252)
+    {
+        u8 pairMask = (u8)br_get(r, 6);
+        u8 smallIdx = (u8)br_get(r, 3);
+        if (r->err) return FALSE;
+        for (int i = 0; i < 6; i++) if (pairMask & (1u << i)) outEvQ[i] = 63;
+        if (smallIdx < 6 && !(pairMask & (1u << smallIdx))) outEvQ[smallIdx] = 1;
+        return TRUE;
+    }
+    else if (mode == EV_ENC_SPARSE)
+    {
+        u8 mask = (u8)br_get(r, 6);
+        if (r->err) return FALSE;
+        for (int i = 0; i < 6; i++)
+            if (mask & (1u << i))
+                outEvQ[i] = (u8)br_get(r, 6);
+        return r->err ? FALSE : TRUE;
+    }
+
+    // Unknown mode
+    r->err = 1;
+    return FALSE;
 }
 
 // ---------- Per-species move list (built at runtime) ----------
