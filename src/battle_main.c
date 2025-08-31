@@ -1831,7 +1831,8 @@ static u32 GeneratePartyHash(const struct Trainer *trainer, u32 i)
     const u8 *buffer = (const u8 *) &trainer->party[i];
     u32 n = sizeof(*trainer->party);
     #if P_CUSTOM_COLOUR_VARIANTS
-      return Crc32B(buffer, n) ^ i;
+      u32 crc = Crc32B(buffer, n);
+      return (crc<<(2*i) | (crc>>(32-(2*i))));
     #else
       return Crc32B(buffer, n);
     #endif
@@ -1944,6 +1945,7 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
             }
             CreateMon(&party[i], partyData[monIndex].species, partyData[monIndex].lvl, 0, TRUE, personalityValue, otIdType, fixedOtId);
             SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[monIndex].heldItem);
+            SetMonData(&party[i], MON_DATA_OT_NAME, trainer->trainerName );
 
             CustomTrainerPartyAssignMoves(&party[i], &partyData[monIndex]);
             SetMonData(&party[i], MON_DATA_IVS, &(partyData[monIndex].iv));
