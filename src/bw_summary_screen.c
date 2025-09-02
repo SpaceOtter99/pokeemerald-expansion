@@ -101,7 +101,7 @@ enum BWSkillsPageState
 #define PSS_LABEL_WINDOW_END 14
 
 // Dynamic fields for the Pokémon Info page
-#define PSS_DATA_WINDOW_INFO_OT_OTID_ITEM 0
+#define PSS_DATA_WINDOW_INFO_OT_PID_ITEM 0
 #define PSS_DATA_WINDOW_INFO_MEMO 1
 #define PSS_DATA_WINDOW_INFO_DEX_NUMBER_NAME 2
 
@@ -186,7 +186,8 @@ static EWRAM_DATA struct PokemonSummaryScreenData
         u8 ppBonuses; // 0x34
         u8 sanity; // 0x35
         u8 OTName[17]; // 0x36
-        u32 OTID; // 0x48  
+        u32 OTID; //0x48
+        u32 personality;
         u8 teraType;
         u8 mintNature;
         u8 ivHp;
@@ -287,7 +288,7 @@ static void CreateTextPrinterTask(u8);
 static void PrintInfoPageText(void);
 static void Task_PrintInfoPage(u8);
 static void PrintMonOTName(void);
-static void PrintMonOTID(void);
+static void PrintMonPID(void);
 static void PrintMonDexNumberSpecies(void);
 static void PrintMonAbilityName(void);
 static void PrintMonAbilityDescription(void);
@@ -395,8 +396,8 @@ static const u8 sText_Info[]                                = _("Info");
 static const u8 sText_ViewIVs[]                             = _("View IV");
 static const u8 sText_ViewEVs[]                             = _("View EV");
 static const u8 sText_ViewStats[]                           = _("View Stats");
-static const u8 sText_ViewIVs_Graded[]                      = _("See Innate");
-static const u8 sText_ViewEVs_Graded[]                      = _("See Effort");
+static const u8 sText_ViewIVs_Graded[]                      = _("View IV");
+static const u8 sText_ViewEVs_Graded[]                      = _("View EV");
 static const u8 sText_NextLv[]                              = _("Next Lv.");
 static const u8 sText_RentalPkmn[]                          = _("Rental Pokémon");
 static const u8 sText_None[]                                = _("None");
@@ -629,7 +630,7 @@ static const struct WindowTemplate sSummaryTemplate[] =
 };
 static const struct WindowTemplate sPageInfoTemplate[] =
 {
-    [PSS_DATA_WINDOW_INFO_OT_OTID_ITEM] = {
+    [PSS_DATA_WINDOW_INFO_OT_PID_ITEM] = {
         .bg = 0,
         .tilemapLeft = 7,
         .tilemapTop = 7,
@@ -2221,7 +2222,7 @@ static bool8 ExtractMonDataToSummaryStruct(struct Pokemon *mon)
         ConvertInternationalString(sum->OTName, GetMonData(mon, MON_DATA_LANGUAGE));
         sum->ailment = GetMonAilment(mon);
         sum->OTGender = GetMonData(mon, MON_DATA_OT_GENDER);
-        sum->OTID = GetMonData(mon, MON_DATA_OT_ID);
+        sum->personality = GetMonData(mon, MON_DATA_PERSONALITY);
         sum->metLocation = GetMonData(mon, MON_DATA_MET_LOCATION);
         sum->metLevel = GetMonData(mon, MON_DATA_MET_LEVEL);
         sum->metGame = GetMonData(mon, MON_DATA_MET_GAME);
@@ -3870,7 +3871,7 @@ static void PrintInfoPageText(void)
     else
     {
         PrintMonOTName();
-        PrintMonOTID();
+        PrintMonPID();
         PrintMonDexNumberSpecies();
         PrintHeldItemName();
         BufferMonTrainerMemo();
@@ -3887,7 +3888,7 @@ static void Task_PrintInfoPage(u8 taskId)
         PrintMonOTName();
         break;
     case 2:
-        PrintMonOTID();
+        PrintMonPID();
         break;
     case 3:
         PrintMonDexNumberSpecies();
@@ -3961,7 +3962,7 @@ static void PrintMonOTName(void)
     int windowId;
     if (InBattleFactory() != TRUE && InSlateportBattleTent() != TRUE)
     {
-        windowId = AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_OT_OTID_ITEM);
+        windowId = AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_OT_PID_ITEM);
         if (sMonSummaryScreen->summary.OTGender == 0)
             PrintTextOnWindow(windowId, sMonSummaryScreen->summary.OTName, 12, 4, 0, 5);
         else
@@ -3970,21 +3971,23 @@ static void PrintMonOTName(void)
     else
     {
         StringCopy(gStringVar1, sText_RentalPkmn);
-        PrintTextOnWindow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_OT_OTID_ITEM), gStringVar1, 12, 4, 0, 0);
+        PrintTextOnWindow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_OT_PID_ITEM), gStringVar1, 12, 4, 0, 0);
     }
 }
 
-static void PrintMonOTID(void)
+static void PrintMonPID(void)
 {
     if (InBattleFactory() != TRUE && InSlateportBattleTent() != TRUE)
     {
-        ConvertIntToDecimalStringN(gStringVar1, (u16)sMonSummaryScreen->summary.OTID, STR_CONV_MODE_LEADING_ZEROS, 5);
-        PrintTextOnWindow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_OT_OTID_ITEM), gStringVar1, 12, 16, 0, 0);
+        MgbaPrintf(MGBA_LOG_INFO, "%lx", sMonSummaryScreen->summary.personality);
+        ConvertIntToHexStringN(gStringVar1, sMonSummaryScreen->summary.personality >> 16, STR_CONV_MODE_LEADING_ZEROS, 4);
+        ConvertIntToHexStringN(gStringVar1 + 4, sMonSummaryScreen->summary.personality & 0x0000FFFF, STR_CONV_MODE_LEADING_ZEROS, 4);        
+        PrintTextOnWindow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_OT_PID_ITEM), gStringVar1, 12, 16, 0, 0);
     }
     else
     {
         StringCopy(gStringVar1, gText_FiveMarks);
-        PrintTextOnWindow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_OT_OTID_ITEM), gStringVar1, 12, 16, 0, 0);
+        PrintTextOnWindow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_OT_PID_ITEM), gStringVar1, 12, 16, 0, 0);
     }
 }
 
@@ -4131,14 +4134,14 @@ static bool8 IsInGamePartnerMon(void)
 
 static void PrintEggOTName(void)
 {
-    u32 windowId = AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_OT_OTID_ITEM);
+    u32 windowId = AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_OT_PID_ITEM);
     PrintTextOnWindow(windowId, gText_FiveMarks, 12, 4, 0, 0);
 }
 
 static void PrintEggOTID(void)
 {
     StringCopy(gStringVar1, gText_FiveMarks);
-    PrintTextOnWindow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_OT_OTID_ITEM), gStringVar1, 12, 16, 0, 0);
+    PrintTextOnWindow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_OT_PID_ITEM), gStringVar1, 12, 16, 0, 0);
 }
 
 static void PrintEggState(void)
@@ -4252,8 +4255,8 @@ static void PrintHeldItemName(void)
         text = gStringVar1;
     }
 
-    fontId = GetFontIdToFit(text, FONT_SHORT, 0, WindowTemplateWidthPx(&sPageSkillsTemplate[PSS_DATA_WINDOW_INFO_OT_OTID_ITEM]) - 8);
-    PrintTextOnWindowWithFont(AddWindowFromTemplateList(sPageSkillsTemplate, PSS_DATA_WINDOW_INFO_OT_OTID_ITEM), text, 12, 28, 0, 0, fontId);
+    fontId = GetFontIdToFit(text, FONT_SHORT, 0, WindowTemplateWidthPx(&sPageSkillsTemplate[PSS_DATA_WINDOW_INFO_OT_PID_ITEM]) - 8);
+    PrintTextOnWindowWithFont(AddWindowFromTemplateList(sPageSkillsTemplate, PSS_DATA_WINDOW_INFO_OT_PID_ITEM), text, 12, 28, 0, 0, fontId);
 }
 
 static void UNUSED PrintRibbonCount(void)
