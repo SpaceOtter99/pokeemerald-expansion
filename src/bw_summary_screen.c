@@ -2033,32 +2033,32 @@ static bool8 DecompressGraphics(void)
     case 1:
         if (FreeTempTileDataBuffersIfPossible() != 1)
         {
-            LZDecompressWram(sSummaryPage_Info_Tilemap_BW, sMonSummaryScreen->bg2TilemapBuffers[PSS_PAGE_INFO]);
+            DecompressDataWithHeaderWram(sSummaryPage_Info_Tilemap_BW, sMonSummaryScreen->bg2TilemapBuffers[PSS_PAGE_INFO]);
             sMonSummaryScreen->switchCounter++;
         }
         break;
     case 2:
-        LZDecompressWram(sSummaryPage_Skills_Tilemap_BW, sMonSummaryScreen->bg2TilemapBuffers[PSS_PAGE_SKILLS]);
+        DecompressDataWithHeaderWram(sSummaryPage_Skills_Tilemap_BW, sMonSummaryScreen->bg2TilemapBuffers[PSS_PAGE_SKILLS]);
         sMonSummaryScreen->switchCounter++;
         break;
     case 3:
-        LZDecompressWram(sSummaryPage_BattleMoves_Tilemap_BW, sMonSummaryScreen->bg2TilemapBuffers[PSS_PAGE_BATTLE_MOVES]);
+        DecompressDataWithHeaderWram(sSummaryPage_BattleMoves_Tilemap_BW, sMonSummaryScreen->bg2TilemapBuffers[PSS_PAGE_BATTLE_MOVES]);
         sMonSummaryScreen->switchCounter++;
         break;
     case 4:
-        LZDecompressWram(sSummaryPage_ContestMoves_Tilemap_BW, sMonSummaryScreen->bg2TilemapBuffers[PSS_PAGE_CONTEST_MOVES]);
+        DecompressDataWithHeaderWram(sSummaryPage_ContestMoves_Tilemap_BW, sMonSummaryScreen->bg2TilemapBuffers[PSS_PAGE_CONTEST_MOVES]);
         sMonSummaryScreen->switchCounter++;
         break;
     case 5:
-        LZDecompressWram(sSummaryEffect_Battle_Tilemap_BW, sMonSummaryScreen->bg1TilemapBuffers[PSS_EFFECT_BATTLE]);
+        DecompressDataWithHeaderWram(sSummaryEffect_Battle_Tilemap_BW, sMonSummaryScreen->bg1TilemapBuffers[PSS_EFFECT_BATTLE]);
         sMonSummaryScreen->switchCounter++;
         break;
     case 6:
-        LZDecompressWram(sSummaryEffect_Contest_Tilemap_BW, sMonSummaryScreen->bg1TilemapBuffers[PSS_EFFECT_CONTEST]);
+        DecompressDataWithHeaderWram(sSummaryEffect_Contest_Tilemap_BW, sMonSummaryScreen->bg1TilemapBuffers[PSS_EFFECT_CONTEST]);
         sMonSummaryScreen->switchCounter++;
         break;
     case 7:
-        LZDecompressWram(sSummaryPage_ScrollBG_Tilemap_BW, sMonSummaryScreen->bg3TilemapBuffers);
+        DecompressDataWithHeaderWram(sSummaryPage_ScrollBG_Tilemap_BW, sMonSummaryScreen->bg3TilemapBuffers);
         sMonSummaryScreen->switchCounter++;
         break;
     case 8:

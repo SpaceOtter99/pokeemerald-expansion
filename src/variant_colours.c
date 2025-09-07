@@ -1,4 +1,4 @@
-#include "variant_colours_data.h"
+#include "variant_colours.h"
 
 static inline int ClampI(int x, int lo, int hi)
 {
@@ -99,14 +99,6 @@ const struct SpeciesVariant *GetSpeciesVariants(u32 species)
         return &s;
     }
     return l;
-}
-
-static inline u32 mulberry(u32 *rngState) {
-  u32 z = *rngState + 0x6D2B79F5;
-  z = (z ^ z >> 15) * (1 | z);
-  z ^= z + (z ^ z >> 7) * (61 | z);
-  *rngState = z ^ z >> 14;
-  return *rngState;
 }
 
 static inline u32 randRange(u32 *rngState, u32 max) {

@@ -180,7 +180,9 @@ static void GachaVBlankCallback(void);
 static void SpriteCB_BouncingPokeball(struct Sprite *);
 static void SpriteCB_BouncingPokeballArrive(struct Sprite *);
 
-static const u8 sMessageText[] = _("NEW POKéMON : {STR_VAR_1}%");
+static const u8 sFontColor_Black[3] = {TEXT_COLOR_TRANSPARENT, 0x7, 0x4};
+static const u8 sMinWagerText[] = _("{TRANSPARENT}Min Wager    : ¥{STR_VAR_1}");
+static const u8 sMessageText[] =  _("{TRANSPARENT}New Pokémon : {STR_VAR_2}%");
 
 static void SpriteCB_Null(struct Sprite *sprite)
 {
@@ -2170,21 +2172,42 @@ static const u16 sGachaMasterSpeciesUltraRare[] = {
 
 static void ShowMessage(void)
 {
-    u16 bet;
+    u16 bet, minWager;
     struct WindowTemplate template;
 
-    SetWindowTemplateFields(&template, GACHA_MENUS, 17, 10, 10, 2, 0xF, 0x194);
+    switch (sGacha->GachaId)
+    {
+    default:
+    case GACHA_BASIC:
+        minWager = GACHA_BASIC_MIN_WAGER;
+        LoadPalette(Gacha_Menu_Basic_Pal, BG_PLTT_ID(0xD), PLTT_SIZE_4BPP);
+        break;
+    case GACHA_GREAT:
+        minWager = GACHA_GREAT_MIN_WAGER;
+        LoadPalette(Gacha_Menu_Great_Pal, BG_PLTT_ID(0xD), PLTT_SIZE_4BPP);
+        break;
+    case GACHA_ULTRA:
+        minWager = GACHA_ULTRA_MIN_WAGER;
+        LoadPalette(Gacha_Menu_Ultra_Pal, BG_PLTT_ID(0xD), PLTT_SIZE_4BPP);
+        break;
+    case GACHA_MASTER:
+        minWager = GACHA_MASTER_MIN_WAGER;
+        LoadPalette(Gacha_Menu_Master_Pal, BG_PLTT_ID(0xD), PLTT_SIZE_4BPP);
+        break;
+    }
+
+    SetWindowTemplateFields(&template, GACHA_MENUS, 17, 9, 14, 4, 0xD, 0x194);
     
     sTextWindowId = AddWindow(&template);
-    FillWindowPixelBuffer(sTextWindowId, PIXEL_FILL(0));
     PutWindowTilemap(sTextWindowId);
-    LoadUserWindowBorderGfx(sTextWindowId, 0x214, BG_PLTT_ID(14));
-    DrawStdWindowFrame(sTextWindowId, FALSE); 
     bet = sGacha->newMonOdds;
-    ConvertUIntToDecimalStringN(gStringVar1, bet, STR_CONV_MODE_LEADING_ZEROS, 3);
-    //gStringVar4[0] = '\0';
+    ConvertUIntToDecimalStringN(gStringVar1, minWager, STR_CONV_MODE_LEFT_ALIGN, 4);
+    ConvertUIntToDecimalStringN(gStringVar2, bet, STR_CONV_MODE_LEFT_ALIGN, 3);
+    
+    StringExpandPlaceholders(gStringVar3, sMinWagerText);
     StringExpandPlaceholders(gStringVar4, sMessageText);
-    AddTextPrinterParameterized(sTextWindowId, FONT_NARROW, gStringVar4, 0, 1, 0, 0);
+    AddTextPrinterParameterized3(sTextWindowId, FONT_NARROW, 0, 0, sFontColor_Black, 0, gStringVar3);
+    AddTextPrinterParameterized3(sTextWindowId, FONT_NARROW, 0, 16, sFontColor_Black, 0, gStringVar4);
     CopyWindowToVram(sTextWindowId, 3);
 }
 
@@ -3271,11 +3294,6 @@ static void InitGachaScreen(void)
     CreatePlayerMenu();
     CreateLotteryJPN();
     
-    sGacha->newMonOdds = 0;
-    InitWindows(sGachaWinTemplates);
-    LoadPalette(GetTextWindowPalette(2), 11 * 16, 32);
-    ShowMessage();
-
     UpdateCursorPosition(gSprites[sGacha->ArrowsSpriteId].x);
     sGacha->waitTimer = 0;
     GetPokemonOwned();
@@ -3285,6 +3303,12 @@ static void InitGachaScreen(void)
     SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_MODE_0 | DISPCNT_OBJ_1D_MAP | DISPCNT_OBJ_ON | DISPCNT_BG2_ON);
     ShowBg(GACHA_BG_BASE);
     ShowBg(GACHA_MENUS);
+
+    sGacha->newMonOdds = 0;
+    InitWindows(sGachaWinTemplates);
+    LoadPalette(GetTextWindowPalette(2), 11 * 16, 32);
+    ShowMessage();
+
     BeginNormalPaletteFade(0xFFFFFFFF, 0, 16, 0, RGB_BLACK);
     SetVBlankCallback(GachaVBlankCallback);
     SetMainCallback2(GachaMainCallback);

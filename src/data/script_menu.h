@@ -265,6 +265,25 @@ static const struct MenuAction MultichoiceList_GameCornerDolls[] =
     {gText_Exit},
 };
 
+static const struct MenuAction MultichoiceList_GameCornerStones[] = 
+{
+    {COMPOUND_STRING("Rare Candy{CLEAR_TO 0x48}4,000 Coins")},
+    {COMPOUND_STRING("Sun Stone{CLEAR_TO 0x48}2,000 Coins")},
+    {COMPOUND_STRING("Moon Stone{CLEAR_TO 0x48}2,000 Coins")},
+    {COMPOUND_STRING("Choice Band{CLEAR_TO 0x48}4,500 Coins")},
+    {COMPOUND_STRING("Bright Powder{CLEAR_TO 0x48}4,500 Coins")},
+    {gText_Exit},
+};
+
+static const struct MenuAction MultichoiceList_GameCornerStones2[] = 
+{
+    {COMPOUND_STRING("Fire Stone{CLEAR_TO 0x48}2,000 Coins")},
+    {COMPOUND_STRING("Thunder Stone{CLEAR_TO 0x48}2,000 Coins")},
+    {COMPOUND_STRING("Water Stone{CLEAR_TO 0x48}2,000 Coins")},
+    {COMPOUND_STRING("Leaf Stone{CLEAR_TO 0x48}2,000 Coins")},
+    {gText_Exit},
+};
+
 static const struct MenuAction MultichoiceList_GameCornerTMs[] =
 {
     {COMPOUND_STRING("TM32{CLEAR_TO 0x48}1,500 Coins")},
@@ -831,8 +850,8 @@ static const struct MultichoiceListStruct sMultichoiceLists[] =
     [MULTI_MECHADOLL5_Q1]              = MULTICHOICE(MultichoiceList_Mechadoll5_Q1),
     [MULTI_MECHADOLL5_Q2]              = MULTICHOICE(MultichoiceList_Mechadoll5_Q2),
     [MULTI_MECHADOLL5_Q3]              = MULTICHOICE(MultichoiceList_Mechadoll5_Q3),
-    [MULTI_UNUSED_40]                  = MULTICHOICE(MultichoiceList_Exit),
-    [MULTI_UNUSED_41]                  = MULTICHOICE(MultichoiceList_Exit),
+    [MULTI_GAMECORNER_NEW]             = MULTICHOICE(MultichoiceList_GameCornerStones),
+    [MULTI_GAMECORNER_NEW2]            = MULTICHOICE(MultichoiceList_GameCornerStones2),
     [MULTI_VENDING_MACHINE]            = MULTICHOICE(MultichoiceList_VendingMachine),
     [MULTI_MACH_BIKE_INFO]             = MULTICHOICE(MultichoiceList_MachBikeInfo),
     [MULTI_ACRO_BIKE_INFO]             = MULTICHOICE(MultichoiceList_AcroBikeInfo),

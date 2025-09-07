@@ -117,13 +117,13 @@
 #define VAR_ROUTE102_STATE                               0x4061 // Unused Var
 #define VAR_ROUTE103_STATE                               0x4062 // Unused Var
 #define VAR_ROUTE104_STATE                               0x4063
-#define VAR_ROUTE105_STATE                               0x4064 // Unused Var
-#define VAR_ROUTE106_STATE                               0x4065 // Unused Var
-#define VAR_ROUTE107_STATE                               0x4066 // Unused Var
-#define VAR_ROUTE108_STATE                               0x4067 // Unused Var
-#define VAR_ROUTE109_STATE                               0x4068 // Unused Var
+#define VAR_DERBY_RACER_NAME_1                           0x4064
+#define VAR_DERBY_RACER_NAME_2                           0x4065
+#define VAR_DERBY_RACER_NAME_3                           0x4066
+#define VAR_DERBY_RACER_NAME_4                           0x4067
+#define VAR_DERBY_RACER_NAME_5                           0x4068
 #define VAR_ROUTE110_STATE                               0x4069
-#define VAR_ROUTE111_STATE                               0x406A // Unused Var
+#define VAR_DERBY_RACER_NAME_6                           0x406A
 #define VAR_ROUTE112_STATE                               0x406B // Unused Var
 #define VAR_ROUTE113_STATE                               0x406C // Unused Var
 #define VAR_ROUTE114_STATE                               0x406D // Unused Var
@@ -134,12 +134,12 @@
 #define VAR_ROUTE119_STATE                               0x4072
 #define VAR_ROUTE120_STATE                               0x4073 // Unused Var
 #define VAR_ROUTE121_STATE                               0x4074
-#define VAR_ROUTE122_STATE                               0x4075 // Unused Var
-#define VAR_ROUTE123_STATE                               0x4076 // Unused Var
-#define VAR_ROUTE124_STATE                               0x4077 // Unused Var
-#define VAR_ROUTE125_STATE                               0x4078 // Unused Var
-#define VAR_ROUTE126_STATE                               0x4079 // Unused Var
-#define VAR_ROUTE127_STATE                               0x407A // Unused Var
+#define VAR_DERBY_RACER_1                                0x4075
+#define VAR_DERBY_RACER_2                                0x4076
+#define VAR_DERBY_RACER_3                                0x4077
+#define VAR_DERBY_RACER_4                                0x4078
+#define VAR_DERBY_RACER_5                                0x4079
+#define VAR_DERBY_RACER_6                                0x407A
 #define VAR_ROUTE128_STATE                               0x407B
 #define VAR_ROUTE129_STATE                               0x407C // Unused Var
 #define VAR_ROUTE130_STATE                               0x407D // Unused Var
@@ -270,9 +270,9 @@
 #define VAR_UNUSED_0x40FA                                0x40FA // Unused Var
 #define VAR_UNUSED_0x40FB                                0x40FB // Unused Var
 #define VAR_UNUSED_0x40FC                                0x40FC // Unused Var
-#define VAR_UNUSED_0x40FD                                0x40FD // Unused Var
-#define VAR_UNUSED_0x40FE                                0x40FE // Unused Var
-#define VAR_UNUSED_0x40FF                                0x40FF // Unused Var
+#define VAR_VOLTORB_FLIP_LEVEL                           0x40FD
+#define VAR_GAME_CORNER_FLAPPYHS                         0x40FE
+#define VAR_GAME_CORNER_WINNINGS                         0x40FF
 
 #define VARS_END                                         0x40FF
 #define VARS_COUNT                                       (VARS_END - VARS_START + 1)

@@ -800,7 +800,7 @@ MauvilleCity_GameCorner_EventScript_ChooseTMPrize::
 	end
 	
 MauvilleCity_GameCorner_EventScript_ChooseNewPrize::
-	@ multichoice 12, 0, MULTI_GAMECORNER_NEW, FALSE
+	multichoice 12, 0, MULTI_GAMECORNER_NEW, FALSE
 	switch VAR_RESULT
 	case 0, MauvilleCity_GameCorner_EventScript_RareCandy
 	case 1, MauvilleCity_GameCorner_EventScript_SunStone
@@ -812,7 +812,7 @@ MauvilleCity_GameCorner_EventScript_ChooseNewPrize::
 	end	
 
 MauvilleCity_GameCorner_EventScript_ChooseNewPrize2::
-	@ multichoice 12, 0, MULTI_GAMECORNER_NEW2, FALSE
+	multichoice 12, 0, MULTI_GAMECORNER_NEW2, FALSE
 	switch VAR_RESULT
 	case 0, MauvilleCity_GameCorner_EventScript_FireStone
 	case 1, MauvilleCity_GameCorner_EventScript_ThunderStone
