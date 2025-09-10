@@ -16,6 +16,12 @@ struct SpeciesVariant {
     u8 pal2_sv_down_only:1;
 };
 
+// Precomputed hue-amount table
+// Code uses hue in [0..255] instead of [0..360]
+// {0,10,20,30,45,60,90,180} -> {0,7,14,21,32,43,64,128}
+static const u8  sHueTable[8] = { 0, 7, 14, 21, 32, 43, 64, 128 };
+static const u8  sSVTable[4]   = { 0, 5, 10, 25 };
+
 // return variant data or return NULL if species has no variants.
 const struct SpeciesVariant *GetSpeciesVariants(u32 species);
 
@@ -74,6 +80,42 @@ void ApplyVariantToPaletteBuffer(u32 species, bool8 shiny, u32 PID, u16 pal16[16
 
 
 static const struct SpeciesVariant gSpeciesVariants[] = {
+  [SPECIES_TORCHIC] = {
+    PAL1(5,4),
+    HSL1(30,0,0,FALSE),
+  },
+  [SPECIES_TREECKO] = {
+    PAL1(1,5),
+    HSL1(30,5,5,FALSE),
+    PAL2(10,3),
+    HSL2(60,25,0,FALSE),
+  },
+  [SPECIES_MUDKIP] = {
+    PAL1(1,9),
+    HSL1(45,10,0,TRUE),
+    PAL2(10,3),
+    HSL2(10,0,0, FALSE),
+  },
+  [SPECIES_POOCHYENA] = {
+    PAL1(1,5),
+    HSL1(0,25,5,FALSE),
+  },
+  [SPECIES_MIGHTYENA] = {
+    PAL1(1,5),
+    HSL1(0,25,5,FALSE),    
+  },
+  [SPECIES_ZIGZAGOON] = {
+    PAL1(5,8),
+    HSL1(10,25,5,FALSE),
+  },
+  [SPECIES_LINOONE] = {
+    PAL1(1,3),
+    HSL1(10, 25, 5, FALSE),
+  },
+  [SPECIES_WURMPLE] = {
+    PAL1(1,4),
+    HSL1(60,0,0, FALSE),
+  },
   [SPECIES_BULBASAUR] = {
     PAL1(2, 4),
     HSL1(30, 10, 0, FALSE),
