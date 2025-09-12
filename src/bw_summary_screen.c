@@ -3979,7 +3979,7 @@ static void PrintMonPID(void)
 {
     if (InBattleFactory() != TRUE && InSlateportBattleTent() != TRUE)
     {
-        MgbaPrintf(MGBA_LOG_INFO, "%lx", sMonSummaryScreen->summary.personality);
+        DebugPrintf(MGBA_LOG_INFO, "%lx", sMonSummaryScreen->summary.personality);
         ConvertIntToHexStringN(gStringVar1, sMonSummaryScreen->summary.personality >> 16, STR_CONV_MODE_LEADING_ZEROS, 4);
         ConvertIntToHexStringN(gStringVar1 + 4, sMonSummaryScreen->summary.personality & 0x0000FFFF, STR_CONV_MODE_LEADING_ZEROS, 4);        
         PrintTextOnWindow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_OT_PID_ITEM), gStringVar1, 12, 16, 0, 0);

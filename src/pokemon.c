@@ -5930,7 +5930,7 @@ const u16 *GetMonSpritePalFromSpecies(u16 species, bool32 isShiny, bool32 isFema
 {
 #if P_CUSTOM_COLOUR_VARIANTS
 
-    MgbaPrintf(MGBA_LOG_INFO, (char *)GetTrainerClassNameFromId(TRAINER_BATTLE_PARAM.opponentA));
+    DebugPrintf(MGBA_LOG_INFO, (char *)GetTrainerClassNameFromId(TRAINER_BATTLE_PARAM.opponentA));
     const u16 *base = GetMonSpritePalFromSpeciesInternal(species, isShiny, isFemale);
     static u16 sVariantPal[16];
     CpuCopy16(base, sVariantPal, sizeof(sVariantPal));
