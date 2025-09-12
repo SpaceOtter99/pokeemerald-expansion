@@ -1,31 +1,32 @@
 #include "global.h"
 #include "constants/species.h"
 
-struct SpeciesVariant {    
-    u8 pal1_start:4;        // Start of 1st palette customichrion range
-    u8 pal1_length:4;       // Length of 1st palette customichrion range (1-indexed)
-    u8 pal2_start:4;
-    u8 pal2_length:4;
-    u8 pal1_hue_amount:3;   // Selects hue from array [0, 10, 20, 30, 45, 60, 90, 180]
-    u8 pal1_chr_amount:2;   // Selects chr from array [0, 5, 10, 25]
-    u8 pal1_lum_amount:2;   // Selects lum from array [0, 5, 10, 25]
-    u8 pal1_sv_down_only:1; // Changes from '+/- chr' to '- 2*chr' (same for lum)
-    u8 pal2_hue_amount:3;
-    u8 pal2_chr_amount:2;
-    u8 pal2_lum_amount:2;
-    u8 pal2_sv_down_only:1;
+struct PaletteVariant {
+    u8 start:4;        // Start index of palette customization range
+    u8 length:4;       // Length of range (stored as (len-1) elsewhere; here store as len-1 as before)
+    u8 hue_amount:3;   // Index into hue table [0,10,20,30,45,60,90,180]
+    u8 chr_amount:2;   // Index into chroma table [0,5,10,25]
+    u8 lum_amount:2;   // Index into luma table [0,5,10,25]
+    u8 sv_down_only:1; // If set, switch from +/- to "down only" for both C & L (C: -2*chr, L: -2*lum)
+};
+
+struct SpeciesVariant {
+    struct PaletteVariant pv1;
+    struct PaletteVariant pv2;
 };
 
 // Precomputed hue-amount table
 // Code uses hue in [0..255] instead of [0..360]
 // {0,10,20,30,45,60,90,180} -> {0,7,14,21,32,43,64,128}
 static const u8  sHueTable[8] = { 0, 7, 14, 21, 32, 43, 64, 128 };
-static const u8  sCLTable[4]   = { 0, 5, 10, 25 };
+static const u8  sCLTable[4]  = { 0, 5, 10, 25 };
 
-// return variant data or return NULL if species has no variants.
+// return variant data or return default if species has no variants.
 const struct SpeciesVariant *GetSpeciesVariants(u32 species);
 
-void ApplyVariantToPaletteBuffer(u32 species, bool8 shiny, u32 PID, u16 pal16[16]);
+void ApplyPaletteVariantToPaletteBuffer(u16 pal16[16], const struct PaletteVariant *pv, u16 prn16);
+void ApplyCustomRestrictionToPalletteBuffer(u8 hMin, u8 hMax, u8 cMin, u8 cMax, u8 lMin, u8 lMax, u16 pal16[16]);
+void ApplyMonSpeciesVariantToPaletteBuffer(u32 species, bool8 shiny, u32 PID, u16 pal16[16]);
 
 // Species data helpers
 
@@ -51,32 +52,31 @@ void ApplyVariantToPaletteBuffer(u32 species, bool8 shiny, u32 PID, u16 pal16[16
      (v)<=10  ? 2 :        \
      /*(v)==25*/ 3) )
 
-#define PAL1(s, l)     \
-    .pal1_start = (s), \
-    .pal1_length = (l) - 1
+#define PAL1(s, l)           \
+    .pv1.start  = (s),       \
+    .pv1.length = (l) - 1
 
-#define PAL2(s, l)     \
-    .pal2_start = (s), \
-    .pal2_length = (l) - 1
+#define PAL2(s, l)           \
+    .pv2.start  = (s),       \
+    .pv2.length = (l) - 1
 
-#define HCL1(h, s, v, f)                 \
-    .pal1_hue_amount = HUE_INDEX(h),       \
-    .pal1_chr_amount = CHR_INDEX(s),       \
-    .pal1_lum_amount = LUM_INDEX(v),       \
-    .pal1_sv_down_only = (f)
+#define HCL1(h, s, v, f)               \
+    .pv1.hue_amount   = HUE_INDEX(h),  \
+    .pv1.chr_amount   = CHR_INDEX(s),  \
+    .pv1.lum_amount   = LUM_INDEX(v),  \
+    .pv1.sv_down_only = (f)
 
-#define HCL2(h, s, v, f)                 \
-    .pal2_hue_amount = HUE_INDEX(h),       \
-    .pal2_chr_amount = CHR_INDEX(s),       \
-    .pal2_lum_amount = LUM_INDEX(v),       \
-    .pal2_sv_down_only = (f)
+#define HCL2(h, s, v, f)               \
+    .pv2.hue_amount   = HUE_INDEX(h),  \
+    .pv2.chr_amount   = CHR_INDEX(s),  \
+    .pv2.lum_amount   = LUM_INDEX(v),  \
+    .pv2.sv_down_only = (f)
 
-#define DEFAULT_VARIANT     \
-    {                       \
-      PAL1(1, 15),          \
-      HCL1(1, 0, 0, FALSE),\
-    }                       \
-
+#define DEFAULT_SPECIES_VARIANT  \
+    {                            \
+      PAL1(1, 15),               \
+      HCL1(10, 0, 0, FALSE),     \
+    }                 
 
 static const struct SpeciesVariant gSpeciesVariants[NUM_SPECIES] = {
   [SPECIES_TORCHIC] = {

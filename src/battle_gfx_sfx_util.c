@@ -662,7 +662,7 @@ void BattleLoadMonSpriteGfx(struct Pokemon *mon, u32 battler)
 #if P_CUSTOM_COLOUR_VARIANTS
     u16 tmp[16];
     CpuCopy16(paletteData, tmp, sizeof tmp);
-    ApplyVariantToPaletteBuffer(species, isShiny, personalityValue, tmp);
+    ApplyMonSpeciesVariantToPaletteBuffer(species, isShiny, personalityValue, tmp);
     LoadPalette(tmp, paletteOffset, PLTT_SIZE_4BPP);
     LoadPalette(tmp, BG_PLTT_ID(8) + BG_PLTT_ID(battler), PLTT_SIZE_4BPP);
 #else

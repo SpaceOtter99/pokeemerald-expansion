@@ -5919,7 +5919,7 @@ const u16 *GetMonSpritePalFromSpeciesAndPersonality(u16 species, bool32 isShiny,
         const u16 *base = GetMonSpritePalFromSpeciesInternal(species, isShiny, IsPersonalityFemale(species, personality));
         static u16 sVariantPal[16];
         CpuCopy16(base, sVariantPal, sizeof(sVariantPal));
-        ApplyVariantToPaletteBuffer(species, isShiny, personality, sVariantPal);
+        ApplyMonSpeciesVariantToPaletteBuffer(species, isShiny, personality, sVariantPal);
         return sVariantPal;
     #else
         return GetMonSpritePalFromSpecies(species, isShiny, IsPersonalityFemale(species, personality));
@@ -5934,7 +5934,7 @@ const u16 *GetMonSpritePalFromSpecies(u16 species, bool32 isShiny, bool32 isFema
     const u16 *base = GetMonSpritePalFromSpeciesInternal(species, isShiny, isFemale);
     static u16 sVariantPal[16];
     CpuCopy16(base, sVariantPal, sizeof(sVariantPal));
-    ApplyVariantToPaletteBuffer(species, isShiny, 0xDEADBEEF, sVariantPal);
+    ApplyMonSpeciesVariantToPaletteBuffer(species, isShiny, 0xDEADBEEF, sVariantPal);
     return sVariantPal;
 }
 
